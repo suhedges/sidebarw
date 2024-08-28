@@ -366,6 +366,14 @@
             var iframe = document.querySelector('#form-container iframe');
             iframe.contentWindow.postMessage({ action: 'shrink' }, '*');
         }
+
+        function sendIframeSize() {
+            var height = document.documentElement.scrollHeight;
+            var width = document.documentElement.scrollWidth;
+            window.parent.postMessage({ height: height, width: width }, "*");
+        }
+        window.onload = sendIframeSize;
+        window.onresize = sendIframeSize;
     
         function showSupportOptions() {
             document.querySelector('.original-options').style.display = 'none';
