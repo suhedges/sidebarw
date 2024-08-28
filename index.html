@@ -355,12 +355,16 @@
             document.querySelector('.location-options').style.display = 'none';
             document.getElementById('form-container').style.display = 'none';
             document.getElementById('location-details-container').style.display = 'none';
+            var iframe = document.querySelector('#form-container iframe');
+            iframe.contentWindow.postMessage({ action: 'expand' }, '*');
         }
     
         function shrinkWidget() {
             var widget = document.getElementById('tsb-widget');
             widget.classList.remove('expanded');
             document.getElementById('widget-content').style.display = 'none';
+            var iframe = document.querySelector('#form-container iframe');
+            iframe.contentWindow.postMessage({ action: 'shrink' }, '*');
         }
     
         function showSupportOptions() {
