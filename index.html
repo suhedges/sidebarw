@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri-State Bearing Widget</title>
+    <style>
+        /* Existing styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #tsb-widget {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 100px;
+            background-color: #ffffff;
+            color: black;
+            border-radius: 8px 0 0 8px;
+            box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1000;
+            cursor: pointer;
+            transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+        }
+
+        #tab {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 10px;
+            font-size: 24px;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 4px 0 0 4px;
+        }
+
+        #widget-content {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+            height: 100%;
+        }
+
+        .widget-option, .sub-options p, .location-header {
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .widget-option img {
+            display: block;
+            margin: 0 auto 5px auto; /* Center image above title */
+            width: 55px;
+            height: auto;
+        }
+
+        /* Shadow effect on hover */
+        .widget-option:hover, .sub-options p:hover, .location-header:hover {
+            background-color: #f0f0f0;
+        }
+
+        .location-header {
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .location-header:before {
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .location-header.expanded:before {
+            content: "-";
+        }
+
+        .location-details {
+            display: none;
+            margin-top: 5px;
+            font-size: 12px; /* Smaller font size for location details */
+            padding-left: 20px;
+        }
+
+        .location-details p {
+            margin: 5px 0;
+        }
+
+        .location-details p.clickable {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        #tsb-widget.expanded {
+            width: 400px;
+            height: 550px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #tsb-widget.expanded #widget-content {
+            display: flex;
+        }
+
+        #tsb-widget.expanded #tab {
+            display: none;
+        }
+
+        #close-widget {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffffff;
+            border-radius: 0 8px 8px 0;
+        }
+
+        #close-widget img {
+            width: 24px; /* Adjust the size as needed */
+            height: 24px; /* Adjust the size as needed */
+            display: block;
+        }
+
+        .sub-options, .location-options, #google-rating, #form-container {
+            display: none;
+        }
+
+        #tsb-widget.expanded #google-rating {
+            display: block;
+        }
+
+        #tsb-widget.expanded .original-options {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        #tsb-widget.expanded .sub-options, .location-options {
+            display: none;
+            flex-direction: column;
+            justify-content: center; /* Vertically center support options */
+            align-items: center; /* Horizontally center support options */
+            height: 100%;
+            width: 230px;
+        }
+
+        #back-arrow {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            cursor: pointer;
+            display: none;
+            background-color: #ffffff;
+            padding: 8px;
+            border-radius: 6px; 
+        }
+
+        #back-arrow img {
+            width: 24px; /* Adjust the size as needed */
+            height: 24px; /* Adjust the size as needed */
+        }
+
+        #google-rating {
+            margin-top: 10px;
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        #google-rating p {
+            font-size: 12px;
+            color: black;
+            margin-bottom: 5px;
+        }
+
+        #rating-stars {
+            font-size: 16px;
+            color: gold;
+        }
+
+        #form-container {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            background-color: #ffffff;
+        }
+
+        #form-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .location-details-container {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 14px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            height: 100%; /* Ensure it takes up full height */
+        }
+        .location-details-container p.clickable {
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .location-details-container p.clickable.address:hover {
+            color: lightblue;
+        }
+
+        .location-details-container p.clickable.phone:hover {
+            color: red;
+        }
+
+        .location-details-container p.clickable.email:hover {
+            color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <!-- Widget Container -->
+    <div id="tsb-widget">
+        <div id="tab" onclick="expandWidget()">☰</div>
+        <div id="widget-content">
+            <div id="close-widget" onclick="shrinkWidget()">
+                <img src="arrows_min.png" alt="Minimize" id="minimize-icon">
+            </div>
+
+            <div class="original-options">
+                <!-- New Chat Option -->
+                <div class="widget-option" onclick="showChatAI()">
+                    <img src="bert_ai.png" alt="Chat">
+                    <p>Chat</p>
+                </div>
+                <div class="widget-option" onclick="showSupportOptions()">
+                    <img src="tsb_sup.png" alt="Support">
+                    <p>Support</p>
+                </div>
+                <div class="widget-option" onclick="showLocationOptions()">
+                    <img src="tsb_loc.png" alt="Locations/Hours">
+                    <p>Locations/Hours</p>
+                </div>
+                <div class="widget-option" onclick="showQuickAnswers()">
+                    <img src="tsb_quick.png" alt="Quick Answers">
+                    <p>Quick Answers</p>
+                </div>
+            </div>
+
+            <div class="sub-options" id="support-options">
+                <p onclick="showForm('leave_message.html')">Leave a Message</p>
+                <p onclick="showForm('report_bug.html')">Report a Bug</p>
+                <p onclick="showForm('feedback_share.html')">Share Feedback</p>
+            </div>
+
+            <div class="location-options" id="location-options">
+                <div class="location-header" onclick="showLocationDetails('EVANSVILLE, IN')">
+                    EVANSVILLE, IN
+                </div>
+                <div class="location-header" onclick="showLocationDetails('JASPER, IN')">
+                    JASPER, IN
+                </div>
+                <div class="location-header" onclick="showLocationDetails('VINCENNES, IN')">
+                    VINCENNES, IN
+                </div>
+                <div class="location-header" onclick="showLocationDetails('BLOOMINGTON, IN')">
+                    BLOOMINGTON, IN
+                </div>
+                <div class="location-header" onclick="showLocationDetails('INDIANAPOLIS, IN')">
+                    INDIANAPOLIS, IN
+                </div>
+                <div class="location-header" onclick="showLocationDetails('HENDERSON, KY')">
+                    HENDERSON, KY
+                </div>
+                <div class="location-header" onclick="showLocationDetails('HOPKINSVILLE, KY')">
+                    HOPKINSVILLE, KY
+                </div>
+                <div class="location-header" onclick="showLocationDetails('MADISONVILLE, KY')">
+                    MADISONVILLE, KY
+                </div>
+                <div class="location-header" onclick="showLocationDetails('OWENSBORO, KY')">
+                    OWENSBORO, KY
+                </div>
+                <div class="location-header" onclick="showLocationDetails('DuBOIS, IL')">
+                    DuBOIS, IL
+                </div>
+            </div>
+
+            <div id="back-arrow" onclick="goBack()">
+                <img src="back_arr.png" alt="Back">
+            </div>
+
+            <div id="form-container">
+                <iframe src=""></iframe>
+            </div>
+
+            <div id="google-rating">
+                <p>Tri-State Bearing Co Inc. - Evansville, IN</p>
+                <div id="rating-stars">
+                    ★★★★★ 5.0
+                </div>
+            </div>
+
+            <div id="location-details-container" class="location-details-container"></div>
+        </div>
+    </div>
+
+    <script>
+        function expandWidget() {
+            var widget = document.getElementById('tsb-widget');
+            widget.classList.add('expanded');
+            document.getElementById('widget-content').style.display = 'flex';
+            document.querySelector('.original-options').style.display = 'flex';
+            document.querySelector('.sub-options').style.display = 'none';
+            document.getElementById('back-arrow').style.display = 'none';
+            document.getElementById('google-rating').style.display = 'block';
+            document.querySelector('.location-options').style.display = 'none';
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('location-details-container').style.display = 'none';
+        }
+    
+        function shrinkWidget() {
+            var widget = document.getElementById('tsb-widget');
+            widget.classList.remove('expanded');
+            document.getElementById('widget-content').style.display = 'none';
+        }
+    
+        function showSupportOptions() {
+            document.querySelector('.original-options').style.display = 'none';
+            document.getElementById('support-options').style.display = 'flex';
+            document.getElementById('back-arrow').style.display = 'block';
+            document.getElementById('google-rating').style.display = 'none';
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('location-details-container').style.display = 'none';
+        }
+    
+        function showLocationOptions() {
+            document.querySelector('.original-options').style.display = 'none';
+            document.getElementById('location-options').style.display = 'flex';
+            document.getElementById('back-arrow').style.display = 'block';
+            document.getElementById('google-rating').style.display = 'none';
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('location-details-container').style.display = 'none';
+        }
+
+        function showChatAI() {
+            document.querySelector('.original-options').style.display = 'none';
+            document.getElementById('support-options').style.display = 'none';
+            document.getElementById('location-options').style.display = 'none';
+            document.getElementById('form-container').style.display = 'flex';
+            document.querySelector('#form-container iframe').src = 'chat_ai.html';
+            document.getElementById('back-arrow').style.display = 'block';
+            document.getElementById('google-rating').style.display = 'none';
+            document.getElementById('location-details-container').style.display = 'none';
+        }
+    
+        function goBack() {
+            if (document.getElementById('location-details-container').style.display === 'flex') {
+                showLocationOptions(); // Go back to the location list if details are shown
+            } else {
+                expandWidget(); // Go back to the home screen if location list is shown
+            }
+        }
+
+        function showForm(page) {
+            document.querySelector('.original-options').style.display = 'none';
+            document.getElementById('support-options').style.display = 'none';
+            document.getElementById('form-container').style.display = 'flex';
+            document.querySelector('#form-container iframe').src = page;
+            document.getElementById('back-arrow').style.display = 'block';
+            document.getElementById('google-rating').style.display = 'none';
+            document.getElementById('location-details-container').style.display = 'none';
+        }
+
+        function showQuickAnswers() {
+            document.querySelector('.original-options').style.display = 'none';
+            document.getElementById('support-options').style.display = 'none';
+            document.getElementById('location-options').style.display = 'none';
+            document.getElementById('form-container').style.display = 'flex';
+            document.querySelector('#form-container iframe').src = 'quick_ans.html';
+            document.getElementById('back-arrow').style.display = 'block';
+            document.getElementById('google-rating').style.display = 'none';
+            document.getElementById('location-details-container').style.display = 'none';
+        }
+
+        function showLocationDetails(location) {
+            document.getElementById('location-options').style.display = 'none';
+            var detailsContainer = document.getElementById('location-details-container');
+            detailsContainer.innerHTML = getLocationDetails(location);
+            detailsContainer.style.display = 'flex';
+            document.getElementById('back-arrow').style.display = 'block';
+        }
+
+        function getLocationDetails(location) {
+            var details = {
+                'EVANSVILLE, IN': `
+                        <p class="clickable address" onclick="openInMaps('2108 N FARES AVE, EVANSVILLE, IN 47711')">2108 N FARES AVE<br>EVANSVILLE, IN 47711</p>
+                        <p class="clickable phone" onclick="makeCall('812-425-1336')">812-425-1336</p>
+                        <p>Fax: 812-421-6788</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday: 7:30 AM - 6 PM; Saturday 7:30 AM - 12 PM</p>
+                `,
+                'JASPER, IN': `
+                        <p class="clickable address" onclick="openInMaps('211 W 28TH ST, JASPER, IN 47546')">211 W 28TH ST<br>JASPER, IN 47546</p>
+                        <p class="clickable phone" onclick="makeCall('812-482-5090')">812-482-5090</p>
+                        <p>Fax: 812-482-3815</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'HENDERSON, KY': `
+                        <p class="clickable address" onclick="openInMaps('414 N INGRAM, HENDERSON, KY 42420')">414 N INGRAM<br>HENDERSON, KY 42420</p>
+                        <p class="clickable phone" onclick="makeCall('270-826-0617')">270-826-0617</p>
+                        <p>Fax: 270-826-0989</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'VINCENNES, IN': `
+                        <p class="clickable address" onclick="openInMaps('1609 WILLOW ST, VINCENNES, IN 48591')">1609 WILLOW ST<br>VINCENNES, IN 48591</p>
+                        <p class="clickable phone" onclick="makeCall('812-882-2711')">812-882-2711</p>
+                        <p>Fax: 812-882-0322</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'BLOOMINGTON, IN': `
+                        <p class="clickable address" onclick="openInMaps('5117 S COMMERCIAL ST, BLOOMINGTON, IN 47403')">5117 S COMMERCIAL ST<br>BLOOMINGTON, IN 47403</p>
+                        <p class="clickable phone" onclick="makeCall('812-333-4331')">812-333-4331</p>
+                        <p>Fax: 812-333-5512</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'HOPKINSVILLE, KY': `
+                        <p class="clickable address" onclick="openInMaps('1800 VFW LANE, HOPKINSVILLE, KY 42240')">1800 VFW LANE<br>HOPKINSVILLE, KY 42240</p>
+                        <p class="clickable phone" onclick="makeCall('270-889-0530')">270-889-0530</p>
+                        <p>Fax: 270-889-0750</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'INDIANAPOLIS, IN': `
+                        <p class="clickable address" onclick="openInMaps('2205 ENTERPRISE PARK PLACE, INDIANAPOLIS, IN 46218')">2205 ENTERPRISE PARK PLACE<br>INDIANAPOLIS, IN 46218</p>
+                        <p class="clickable phone" onclick="makeCall('317-924-3287')">317-924-3287</p>
+                        <p>Fax: 317-924-3561</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'MADISONVILLE, KY': `
+                        <p class="clickable address" onclick="openInMaps('1115 ISLAND FORD RD, MADISONVILLE, KY 42431')">1115 ISLAND FORD RD<br>MADISONVILLE, KY 42431</p>
+                        <p class="clickable phone" onclick="makeCall('270-825-0788')">270-825-0788</p>
+                        <p>Fax: 270-825-0786</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'OWENSBORO, KY': `
+                        <p class="clickable address" onclick="openInMaps('1216 WING AVE, OWENSBORO, KY 42303')">1216 WING AVE<br>OWENSBORO, KY 42303</p>
+                        <p class="clickable phone" onclick="makeCall('270-228-4343')">270-228-4343</p>
+                        <p>Fax: 270-684-6673</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `,
+                'DuBOIS, IL': `
+                        <p class="clickable address" onclick="openInMaps('716 HWY 51, DuBOIS, IL 62831')">716 HWY 51<br>DuBOIS, IL 62831</p>
+                        <p class="clickable phone" onclick="makeCall('618-787-2117')">618-787-2117</p>
+                        <p>Fax: 618-787-2015</p>
+                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+                `
+            };
+
+            return details[location] || '<p>Location details not found.</p>';
+        }
+
+        function openInMaps(address) {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`);
+        }
+
+        function makeCall(phoneNumber) {
+            window.open(`tel:${phoneNumber}`);
+        }
+
+        function sendEmail(emailAddress) {
+            window.open(`mailto:${emailAddress}`);
+        }
+    </script>
+</body>
+</html>

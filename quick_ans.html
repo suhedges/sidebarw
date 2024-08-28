@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Answers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .accordion-container {
+            width: 100%;
+            max-width: 280px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .accordion {
+            background-color: #ffffff;
+            color: black;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            margin-bottom: 5px;
+            border-radius: 8px;
+        }
+
+        .accordion.active {
+            background-color: #f0f0f0; /* Light grey background when active */
+        }
+
+        .accordion:hover {
+            background-color: #e0e0e0;
+        }
+
+        .accordion:after {
+            content: '\002B';
+            color: black;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .accordion.active:after {
+            content: "\2212"; /* Change to minus sign when active */
+        }
+
+        .panel {
+            padding: 0 15px;
+            display: none;
+            background-color: white;
+            overflow: hidden;
+            border-radius: 0 0 8px 8px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel p {
+            padding: 15px 0;
+            font-size: 14px;
+            color: #08954C;
+        }
+    </style>
+</head>
+<body>
+    <div class="accordion-container">
+        <button class="accordion">How to Buy Products</button>
+        <div class="panel">
+            <p>You can purchase products directly from our website by browsing through the categories or using the search bar. Add items to your cart, proceed to checkout, and complete the payment process to finalize your order.</p>
+        </div>
+
+        <button class="accordion">Shipping Times and Costs</button>
+        <div class="panel">
+            <p>Shipping times vary based on your location and the shipping method selected. Standard shipping typically takes 3-5 business days, while expedited options are available. Shipping costs are calculated at checkout.</p>
+        </div>
+
+        <button class="accordion">Return and Exchange Policy</button>
+        <div class="panel">
+            <p>We accept returns and exchanges within 30 days of purchase. Items must be in their original condition, and a receipt is required. Please contact our customer service for more details on how to initiate a return or exchange.</p>
+        </div>
+
+        <button class="accordion">Tracking Your Order</button>
+        <div class="panel">
+            <p>After your order is shipped, you will receive a tracking number via email. You can use this number to track the status of your delivery through our website or the carrier's site.</p>
+        </div>
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                for (var j = 0; j < acc.length; j++) {
+                    if (acc[j] !== this) {
+                        acc[j].classList.remove("active");
+                        acc[j].nextElementSibling.style.display = "none";
+                    }
+                }
+
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

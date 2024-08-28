@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step Form with Number Rating</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .header {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            width: 200px;
+            resize: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #66afe9;
+            outline: none;
+        }
+
+        .form-group .required {
+            color: red;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .buttons button {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .buttons button:hover {
+            background-color: #ddd;
+        }
+
+        .buttons .next-btn,
+        .buttons .send-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .buttons .next-btn:hover,
+        .buttons .send-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .buttons .next-btn:disabled,
+        .buttons .send-btn:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+
+        .buttons .back-btn {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .buttons .back-btn:hover {
+            background-color: #ddd;
+        }
+
+        .rating-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .rating-group label {
+            font-size: 12px;
+            color: #333;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 6px;
+            border-radius: 5px;
+            width: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating-group input[type="radio"] {
+            display: none;
+        }
+
+        .rating-group input[type="radio"]:checked ~ label {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .rating-group .description {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="step-1">
+        <div class="header">Who are you?</div>
+        <form id="step1Form">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="buttons">
+                <button type="button" class="back-btn" disabled>Back</button>
+                <button type="button" class="next-btn" disabled>Next</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="step-2" style="display: none;">
+        <div class="header">How likely are you to recommend our service?</div>
+        <form id="step2Form">
+            <input type="hidden" name="access_key" value="57d23900-98bb-4963-89a1-f08ffe1d2bf8">
+            <input type="hidden" name="subject" value="New Submission from Web3Forms">
+            <input type="checkbox" name="botcheck" style="display: none;">
+            
+            <div class="rating-group">
+                <div>
+                    <input type="radio" id="zero" name="nps" value="0" class="navigate peer hidden" data-step="2">
+                    <label for="zero">0</label>
+                </div>
+                <div>
+                    <input type="radio" id="one" name="nps" value="1" class="navigate peer hidden" data-step="2">
+                    <label for="one">1</label>
+                </div>
+                <div>
+                    <input type="radio" id="two" name="nps" value="2" class="navigate peer hidden" data-step="2">
+                    <label for="two">2</label>
+                </div>
+                <div>
+                    <input type="radio" id="three" name="nps" value="3" class="navigate peer hidden" data-step="2">
+                    <label for="three">3</label>
+                </div>
+                <div>
+                    <input type="radio" id="four" name="nps" value="4" class="navigate peer hidden" data-step="2">
+                    <label for="four">4</label>
+                </div>
+                <div>
+                    <input type="radio" id="five" name="nps" value="5" class="navigate peer hidden" data-step="2">
+                    <label for="five">5</label>
+                </div>
+                <div>
+                    <input type="radio" id="six" name="nps" value="6" class="navigate peer hidden" data-step="2">
+                    <label for="six">6</label>
+                </div>
+                <div>
+                    <input type="radio" id="seven" name="nps" value="7" class="navigate peer hidden" data-step="2">
+                    <label for="seven">7</label>
+                </div>
+                <div>
+                    <input type="radio" id="eight" name="nps" value="8" class="navigate peer hidden" data-step="2">
+                    <label for="eight">8</label>
+                </div>
+                <div>
+                    <input type="radio" id="nine" name="nps" value="9" class="navigate peer hidden" data-step="2">
+                    <label for="nine">9</label>
+                </div>
+                <div>
+                    <input type="radio" id="ten" name="nps" value="10" class="navigate peer hidden" data-step="2">
+                    <label for="ten">10</label>
+                </div>
+            </div>
+
+            <div class="rating-group description">
+                <span>Less Likely</span>
+                <span>Very Likely</span>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Can you tell us a bit more about your score?</label>
+                <textarea id="comments" name="comments" required></textarea>
+            </div>
+
+            <div class="buttons">
+                <button type="button" class="back-btn">Back</button>
+                <button type="submit" class="send-btn" disabled>Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('name').addEventListener('input', checkStep1);
+        document.getElementById('email').addEventListener('input', checkStep1);
+        document.querySelectorAll('.rating-group input').forEach(radio => {
+            radio.addEventListener('change', checkStep2);
+        });
+        document.getElementById('comments').addEventListener('input', checkStep2);
+
+        function checkStep1() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValid = name.length > 0 && emailPattern.test(email);
+
+            document.querySelector('.next-btn').disabled = !isValid;
+        }
+
+        function checkStep2() {
+            const ratingSelected = document.querySelector('.rating-group input:checked') !== null;
+            const comments = document.getElementById('comments').value.trim();
+            const isValid = ratingSelected && comments.length > 0;
+
+            document.querySelector('.send-btn').disabled = !isValid;
+        }
+
+        document.querySelector('.next-btn').addEventListener('click', function() {
+            document.querySelector('.step-1').style.display = 'none';
+            document.querySelector('.step-2').style.display = 'block';
+        });
+
+        // Updated to ensure the back button in step 2 works correctly
+        document.querySelector('.step-2 .back-btn').addEventListener('click', function() {
+            document.querySelector('.step-2').style.display = 'none';
+            document.querySelector('.step-1').style.display = 'block';
+        });
+
+        document.getElementById('step2Form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Message sent successfully!');
+                } else {
+                    alert('There was an error sending your message: ' + (data.message || 'Unknown error.'));
+                }
+                document.getElementById('step2Form').reset(); // Clear the form
+                checkStep2();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+</body>
+</html>
