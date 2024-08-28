@@ -356,7 +356,7 @@
             document.getElementById('form-container').style.display = 'none';
             document.getElementById('location-details-container').style.display = 'none';
             var iframe = document.querySelector('#form-container iframe');
-            iframe.contentWindow.postMessage({ action: 'expand' }, '*');
+            iframe.contentWindow.postMessage({ action: 'expand' }, "https://suhedges.github.io");
         }
     
         function shrinkWidget() {
@@ -364,13 +364,13 @@
             widget.classList.remove('expanded');
             document.getElementById('widget-content').style.display = 'none';
             var iframe = document.querySelector('#form-container iframe');
-            iframe.contentWindow.postMessage({ action: 'shrink' }, '*');
+            iframe.contentWindow.postMessage({ action: 'shrink' }, "https://suhedges.github.io");
         }
 
         function sendIframeSize() {
             var height = document.documentElement.scrollHeight;
             var width = document.documentElement.scrollWidth;
-            window.parent.postMessage({ height: height, width: width }, "*");
+            window.parent.postMessage({ height: height, width: width }, "https://suhedges.github.io");
         }
         window.onload = sendIframeSize;
         window.onresize = sendIframeSize;
