@@ -32,7 +32,11 @@
             overflow: hidden;
             z-index: 100000;
             cursor: pointer;
-            transition: width 0.3s ease-in-out, height 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transition: 
+                width 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+                height 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+                transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+                box-shadow 0.4s ease-in-out;
             transform-origin: bottom right;
         }
 
@@ -121,15 +125,27 @@
         #tsb-widget.expanded {
             width: 400px;
             height: 550px;
+            transform: translateY(0) scale(1.05);
+            box-shadow: -4px 4px 15px rgba(0, 0, 0, 0.2);
             bottom: 20px;
             right: 20px;
-            transform: translateY(0);
             border-radius: 8px;
         }
 
         #tsb-widget.expanded #widget-content {
             display: flex;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
         }
+
+        @keyframes fadeIn {
+            from {
+		opacity: 0;
+	    }
+	    to {
+		opacity: 1;
+	    }
+	}
 
         #tsb-widget.expanded #tab {
             display: none;
@@ -143,7 +159,13 @@
             cursor: pointer;
             background-color: #ffffff;
             border-radius: 0 8px 8px 0;
+            transition: transform 0.4s ease-in-out;
         }
+
+        #close-widget:hover {
+            transform: rotate(-90deg);
+        }
+
 
         #close-widget img {
             width: 24px; /* Adjust the size as needed */
@@ -240,7 +262,7 @@
         }
         .location-details-container p.clickable {
             cursor: pointer;
-            transition: color 0.2s ease;
+            transition: color 0.05s ease;
         }
 
         .location-details-container p.clickable.address:hover {
@@ -368,8 +390,8 @@
 
         function sendIframeSize() { 
             var widget = document.getElementById('tsb-widget');
-            var height = widget.offsetHeight + 30;
-            var width = widget.offsetWidth + 30;  
+            var height = widget.offsetHeight + 10;
+            var width = widget.offsetWidth + 10;  
             var iframe = document.querySelector('#form-container iframe');
     
            
@@ -538,6 +560,12 @@
         function sendEmail(emailAddress) {
             window.open(`mailto:${emailAddress}`);
         }
+        document.addEventListener('click', function(event) {
+            var widget = document.getElementById('tsb-widget');
+            if (!widget.contains(event.target) && widget.classList.contains('expanded')) {
+                shrinkWidget();
+            }
+        });
     </script>
 </body>
 </html>
