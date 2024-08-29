@@ -566,6 +566,14 @@
                 shrinkWidget();
             }
         });
+
+        window.addEventListener('message', function(event) {
+            if (event.origin === "https://23600tsb.stage.cimm2.com/") { 
+                if (event.data === 'shrink-widget') {
+                    shrinkWidget();
+                }
+            }
+        });
     </script>
 </body>
 </html>
