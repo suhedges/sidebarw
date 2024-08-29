@@ -373,10 +373,10 @@
     
             // Ensure the iframe is fully loaded and its contentWindow is accessible
             if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.postMessage({ height: height, width: width }, "https://23600tsb.stage.cimm2.com/");
+                window.parent.postMessage({ height: height, width: width }, "*");
             }
 
-            window.parent.postMessage({ height: height, width: width }, "*");
+            window.parent.postMessage({ height: height, width: width }, "https://23600tsb.stage.cimm2.com/");
 
         }
   
