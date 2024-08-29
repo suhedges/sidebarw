@@ -366,12 +366,13 @@
             setTimeout(sendIframeSize, 100); 
         }
 
-        function sendIframeSize() {
-            var height = document.getElementById('tsb-widget').offsetHeight;
-            var width = document.getElementById('tsb-widget').offsetWidth;
+        function sendIframeSize() { 
+            var widget = document.getElementById('tsb-widget');
+            var height = widget.offsetHeight + 10;
+            var width = widget.offsetWidth + 10;  
             var iframe = document.querySelector('#form-container iframe');
     
-            // Ensure the iframe is fully loaded and its contentWindow is accessible
+           
             if (iframe && iframe.contentWindow) {
                 window.parent.postMessage({ height: height, width: width }, "*");
             }
