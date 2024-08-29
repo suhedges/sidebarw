@@ -36,13 +36,14 @@
                 width 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
                 height 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
                 transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+                background-color 0.3s ease-in-out,
                 box-shadow 0.4s ease-in-out;
             transform-origin: bottom right;
         }
 
         #tsb-widget:not(.expanded):hover {
-            transform: scale(1.05);
-            animation: pulse 1s infinite;
+            animation: rubberBand 1s infinite;
+            transform-origin: center;
         }
 
 
@@ -62,8 +63,8 @@
                 background-color 0.2s ease;
         }
 
-        #tab:hover:not(.expanded):hover {
-            transform: scale(1.05);
+        #tab:hover {
+            transform-origin: center; 
             animation: rubberBand  1s infinite;
         }
 
@@ -103,7 +104,7 @@
 
         .widget-option img {
             display: block;
-            margin: 0 auto 5px auto; /* Center image above title */
+            margin: 0 auto 5px auto;
             width: 55px;
             height: auto;
         }
@@ -135,7 +136,7 @@
         .location-details {
             display: none;
             margin-top: 5px;
-            font-size: 12px; /* Smaller font size for location details */
+            font-size: 12px; 
             padding-left: 20px;
         }
 
@@ -151,12 +152,18 @@
         #tsb-widget.expanded {
             width: 400px;
             height: 550px;
+            background-color: #ffffff;
             transform: translateY(0) scale(1.05);
             box-shadow: -4px 4px 15px rgba(0, 0, 0, 0.2);
             bottom: 20px;
             right: 20px;
             border-radius: 8px;
         }
+
+        #tsb-widget:not(.expanded) {
+            background-color: #6E98AD;
+        }
+
 
         #tsb-widget.expanded #widget-content {
             display: flex;
@@ -184,7 +191,7 @@
             padding: 8px;
             cursor: pointer;
             background-color: #ffffff;
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px 8px 8px 8px;
             transition: transform 0.4s ease-in-out;
         }
 
@@ -233,11 +240,41 @@
             background-color: #ffffff;
             padding: 8px;
             border-radius: 6px; 
+            transition: background-color 0.2s ease;
         }
+
+        #back-arrow:hover {
+            animation: rubberBand 1s ease infinite; 
+        }
+
 
         #back-arrow img {
             width: 24px; /* Adjust the size as needed */
             height: 24px; /* Adjust the size as needed */
+        }
+
+        @keyframes rubberBand {
+            0% {
+                transform: scale(1);
+            }
+            30% {
+                transform: scale(1.15, 0.85); /* Slightly reduced intensity */
+            }
+            40% {
+                transform: scale(0.85, 1.15); /* Slightly reduced intensity */
+            }
+            50% {
+                transform: scale(1.1, 0.9); /* Slightly reduced intensity */
+            }
+            65% {
+                transform: scale(0.95, 1.05); /* Slightly reduced intensity */
+            }
+            75% {
+                transform: scale(1.05, 0.95); /* Slightly reduced intensity */
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         #google-rating {
