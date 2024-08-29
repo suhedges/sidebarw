@@ -40,6 +40,12 @@
             transform-origin: bottom right;
         }
 
+        #tsb-widget:not(.expanded):hover {
+            transform: scale(1.05);
+            animation: pulse 1s infinite;
+        }
+
+
         #tab {
             display: flex;
             justify-content: center;
@@ -48,9 +54,29 @@
             height: 100%;
             font-size: 24px;
             text-align: center;
-            background-color: #ffffff;
+            background-color: #6E98AD;
+            color: #ffffff;
             border-radius: 50%;
+            transition: 
+                transform 0.2s ease,
+                background-color 0.2s ease;
         }
+
+        #tab:hover:not(.expanded):hover {
+            transform: scale(1.05);
+            animation: rubberBand  1s infinite;
+        }
+
+        @keyframes rubberBand  {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.25, 0.75); }
+            40% { transform: scale(0.75, 1.25); }
+            50% { transform: scale(1.15, 0.85); }
+            65% { transform: scale(0.95, 1.05); }
+            75% { transform: scale(1.05, 0.95); }
+            100% { transform: scale(1); }
+        }
+
 
         #widget-content {
             display: none;
