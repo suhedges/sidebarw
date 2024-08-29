@@ -29,34 +29,71 @@
             margin-bottom: 10px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
+            gap: 10px;
+            padding-right: 10px;
+        }
+
+        /* Custom scrollbar styles */
+        #messages::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 10px;
+        }
+
+        #messages::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
         }
 
         .message {
             margin: 5px 0;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 10px 15px;
+            border-radius: 20px;
             max-width: 75%;
             word-wrap: break-word;
+            display: inline-block;
+            opacity: 0;
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .user-message {
             background-color: #007bff;
             color: white;
-            align-self: center;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
         }
 
         .assistant-message {
             background-color: #eaeaea;
             color: black;
-            align-self: center;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
         }
 
         #input-container {
             display: flex;
-            width 75%;
+            width: 75%;
             align-items: center;
-            margin: 22px;
+            margin: 35px auto 0;
             padding: 6px;
             background-color: white;
             border-radius: 8px;
