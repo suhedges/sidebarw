@@ -355,26 +355,34 @@
             document.querySelector('.location-options').style.display = 'none';
             document.getElementById('form-container').style.display = 'none';
             document.getElementById('location-details-container').style.display = 'none';
-            var iframe = document.querySelector('#form-container iframe');
-            iframe.contentWindow.postMessage({ action: 'expand' }, "*");
-        }
-    
+
+            setTimeout(sendIframeSize, 100);         }
+
         function shrinkWidget() {
             var widget = document.getElementById('tsb-widget');
             widget.classList.remove('expanded');
             document.getElementById('widget-content').style.display = 'none';
-            var iframe = document.querySelector('#form-container iframe');
-            iframe.contentWindow.postMessage({ action: 'shrink' }, "*");
+        
+            setTimeout(sendIframeSize, 100); 
         }
 
         function sendIframeSize() {
-            var height = document.documentElement.scrollHeight;
-            var width = document.documentElement.scrollWidth;
-            window.parent.postMessage({ height: height, width: width }, "*");
-        }
-        window.onload = sendIframeSize;
-        window.onresize = sendIframeSize;
+            var height = document.getElementById('tsb-widget').offsetHeight;
+            var width = document.getElementById('tsb-widget').offsetWidth;
+            var iframe = document.querySelector('#form-container iframe');
     
+            // Ensure the iframe is fully loaded and its contentWindow is accessible
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ height: height, width: width }, "https://23600tsb.stage.cimm2.com/");
+            }
+
+            window.parent.postMessage({ height: height, width: width }, "*");
+
+        }
+  
+        window.onload = sendIframeSize;
+        window.onresize = sendIframeSize;    
+
         function showSupportOptions() {
             document.querySelector('.original-options').style.display = 'none';
             document.getElementById('support-options').style.display = 'flex';
