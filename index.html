@@ -55,7 +55,7 @@
             height: 100%;
             font-size: 24px;
             text-align: center;
-            background-color: #6E98AD;
+            background-color: #f0620f;
             color: #ffffff;
             border-radius: 50%;
             transition: 
@@ -466,8 +466,13 @@
 
         }
   
-        window.onload = sendIframeSize;
-        window.onresize = sendIframeSize;    
+        window.onload = function() {
+            sendIframeSize();
+        };
+        
+        window.onresize = function() {
+            sendIframeSize();
+        }; 
 
         function showSupportOptions() {
             document.querySelector('.original-options').style.display = 'none';
