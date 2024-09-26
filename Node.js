@@ -103,7 +103,8 @@ function showQuickAnswers() {
 function showLocationDetails(location) {
     document.getElementById('location-options').style.display = 'none';
     var detailsContainer = document.getElementById('location-details-container');
-    detailsContainer.innerHTML = getLocationDetails(location);
+    var trimmedLocation = location.trim(); 
+    detailsContainer.innerHTML = getLocationDetails(trimmedLocation);
     detailsContainer.style.display = 'flex';
     document.getElementById('back-arrow').style.display = 'block';
 }
@@ -111,8 +112,7 @@ function showLocationDetails(location) {
 function getLocationDetails(location) {
     var details = {
         'EVANSVILLE, IN': `
-            <p class="clickable address" onclick="openInMaps('2108 N FARES AVE, EVANSVILLE, IN 47711')">
-                2108 N FARES AVE<br>EVANSVILLE, IN 47711</p>
+            <p class="clickable address" onclick="openInMaps('2108 N FARES AVE, EVANSVILLE, IN 47711')">2108 N FARES AVE<br>EVANSVILLE, IN 47711</p>
             <p class="clickable phone" onclick="makeCall('812-425-1336')">812-425-1336</p>
             <p>Fax: 812-421-6788</p>
             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
@@ -125,7 +125,62 @@ function getLocationDetails(location) {
             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
             <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
         `,
-        // More locations...
+        'HENDERSON, KY': `
+            <p class="clickable address" onclick="openInMaps('414 N INGRAM, HENDERSON, KY 42420')">414 N INGRAM<br>HENDERSON, KY 42420</p>
+            <p class="clickable phone" onclick="makeCall('270-826-0617')">270-826-0617</p>
+            <p>Fax: 270-826-0989</p>
+            <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+            <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `,
+         'VINCENNES, IN': `
+            <p class="clickable address" onclick="openInMaps('1609 WILLOW ST, VINCENNES, IN 48591')">1609 WILLOW ST<br>VINCENNES, IN 48591</p>
+            <p class="clickable phone" onclick="makeCall('812-882-2711')">812-882-2711</p>
+            <p>Fax: 812-882-0322</p>
+            <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+            <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `,
+         'BLOOMINGTON, IN': `
+             <p class="clickable address" onclick="openInMaps('5117 S COMMERCIAL ST, BLOOMINGTON, IN 47403')">5117 S COMMERCIAL ST<br>BLOOMINGTON, IN 47403</p>
+             <p class="clickable phone" onclick="makeCall('812-333-4331')">812-333-4331</p>
+             <p>Fax: 812-333-5512</p>
+             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+             <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `,
+         'HOPKINSVILLE, KY': `
+             <p class="clickable address" onclick="openInMaps('1800 VFW LANE, HOPKINSVILLE, KY 42240')">1800 VFW LANE<br>HOPKINSVILLE, KY 42240</p>
+             <p class="clickable phone" onclick="makeCall('270-889-0530')">270-889-0530</p>
+             <p>Fax: 270-889-0750</p>
+             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+             <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `,
+         'INDIANAPOLIS, IN': `
+             <p class="clickable address" onclick="openInMaps('2205 ENTERPRISE PARK PLACE, INDIANAPOLIS, IN 46218')">2205 ENTERPRISE PARK PLACE<br>INDIANAPOLIS, IN 46218</p>
+             <p class="clickable phone" onclick="makeCall('317-924-3287')">317-924-3287</p>
+             <p>Fax: 317-924-3561</p>
+             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+             <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `,
+         'MADISONVILLE, KY': `
+             <p class="clickable address" onclick="openInMaps('1115 ISLAND FORD RD, MADISONVILLE, KY 42431')">1115 ISLAND FORD RD<br>MADISONVILLE, KY 42431</p>
+             <p class="clickable phone" onclick="makeCall('270-825-0788')">270-825-0788</p>
+             <p>Fax: 270-825-0786</p>
+             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+             <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `,
+         'OWENSBORO, KY': `
+             <p class="clickable address" onclick="openInMaps('1216 WING AVE, OWENSBORO, KY 42303')">1216 WING AVE<br>OWENSBORO, KY 42303</p>
+             <p class="clickable phone" onclick="makeCall('270-228-4343')">270-228-4343</p>
+             <p>Fax: 270-684-6673</p>
+             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+             <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `,
+         'DuBOIS, IL': `
+             <p class="clickable address" onclick="openInMaps('716 HWY 51, DuBOIS, IL 62831')">716 HWY 51<br>DuBOIS, IL 62831</p>
+             <p class="clickable phone" onclick="makeCall('618-787-2117')">618-787-2117</p>
+             <p>Fax: 618-787-2015</p>
+             <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
+             <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
+         `
     };
 
     return details[location] || '<p>Location details not found.</p>';
