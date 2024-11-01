@@ -5,139 +5,324 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat with Bert</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        :root {
+            --background-color: #ffffff;
+            --chat-background: #ffffff;
+            --user-message: #007bff;
+            --assistant-message: #e0e0e0;
+            --input-background: #f0f0f0;
+            --button-background: #007bff;
+            --button-hover: #0056b3;
+            --button-active: #004494;
+            --text-color: #333333;
+            --placeholder-color: #888888;
+            --scrollbar-track: #e0e0e0;
+            --scrollbar-thumb: #007bff;
+        }
+
         body, html {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             height: 100%;
             margin: 0;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background-color: #ffffff;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--background-color);
         }
 
         #chat-container {
+            width: 100%;
+            height: 100%;
+            max-width: 100%; 
+            background-color: var(--chat-background);
             display: flex;
             flex-direction: column;
-            height: 100%;
-            padding: 10px;
-            box-sizing: border-box;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        #header {
+            background-color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            color: #182848;
+            font-size: 1.2em;
+            font-weight: 500;
         }
 
         #messages {
             flex-grow: 1;
+            width: 85%;
+            padding: 20px;
             overflow-y: auto;
-            margin-bottom: 10px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-            padding-right: 10px;
+            gap: 15px;
+            position: relative;
         }
 
-        /* Custom scrollbar styles */
         #messages::-webkit-scrollbar {
-            width: 15px;
+            width: 8px;
         }
 
         #messages::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
+            background: var(--scrollbar-track);
+            border-radius: 4px;
         }
 
         #messages::-webkit-scrollbar-thumb {
-            background: #007bff;
-            border-radius: 10px;
-        }
-
-        #messages::-webkit-scrollbar-thumb:hover {
-            background: #0056b3;
+            background: #3D7190;
+            border-radius: 4px;
         }
 
         .message {
-            margin: 5px 0;
-            padding: 10px 15px;
+            max-width: 80%;
+            padding: 12px 18px;
             border-radius: 20px;
-            max-width: 75%;
-            word-wrap: break-word;
-            display: inline-block;
+            position: relative;
             opacity: 0;
-            animation: fadeInUp 0.3s ease forwards;
+            transform: translateY(20px);
+            animation: slideIn 0.4s forwards;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            word-break: break-word; 
+            overflow-wrap: break-word; 
         }
 
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
+        @keyframes slideIn {
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
         .user-message {
-            background-color: #007bff;
-            color: white;
+            background-color: #3D7190;
+            color: #ffffff;
             align-self: flex-end;
             border-bottom-right-radius: 0;
+            position: relative;
         }
 
         .assistant-message {
-            background-color: #eaeaea;
-            color: black;
+            background-color: var(--assistant-message);
+            color: var(--text-color);
             align-self: flex-start;
             border-bottom-left-radius: 0;
+            position: relative;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .typing-indicator div {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-color);
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
+        }
+
+        .typing-indicator div:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator div:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
         }
 
         #input-container {
             display: flex;
-            width: 75%;
+            padding: 15px;
+            background-color: #ffffff;
             align-items: center;
-            margin: 35px auto 0;
-            padding: 6px;
-            background-color: white;
-            border-radius: 8px;
+            gap: 10px;
+            border-top: 1px solid #e0e0e0;
         }
 
         #message-input {
             flex-grow: 1;
-            padding: 10px;
-            border: none;
-            background-color: #f7f7f7;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 10px 15px;
+            border: 1px solid #cccccc;
+            border-radius: 25px;
+            background-color: #ffffff;
+            color: var(--text-color);
+            font-size: 1em;
+            outline: none;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        #message-input::placeholder {
+            color: var(--placeholder-color);
+        }
+
+        #message-input:focus {
+            background-color: #f9f9f9;
+            border-color: var(--user-message);
         }
 
         #send-button {
-            padding: 10px 20px;
-            margin-left: 10px;
-            background-color: #007bff;
-            color: white;
+            position: relative;
+            background-color: #3D7190;
             border: none;
-            border-radius: 4px;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 50%;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            overflow: hidden;
         }
 
         #send-button:hover {
-            background-color: #0056b3;
+            background-color: #B4C8D5;
+            transform: scale(1.05);
         }
 
+        #send-button:active {
+            background-color: #B4C8D5;
+            transform: scale(0.95);
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .send-icon {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .send-icon.sent {
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .checkmark::after {
+            content: '✔';
+            color: #ffffff;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .checkmark.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .checkmark.visible::after {
+            opacity: 1;
+        }
+
+
+        .spinner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner.visible {
+            opacity: 1;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Welcome Message Styling */
         #welcome-message {
             text-align: center;
-            margin-bottom: 15px;
-            color: #555;
+            color: var(--placeholder-color);
             font-style: italic;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @media (max-width: 500px) {
+            #chat-container {
+                width: 80%;
+                height: 100vh;
+            }
+
+            #input-container {
+                padding: 10px;
+            }
+
+            #message-input {
+                padding: 8px 12px;
+            }
+
+            #send-button {
+                padding: 8px 12px;
+                font-size: 1em;
+            }
         }
     </style>
 </head>
 <body>
     <div id="chat-container">
         <div id="messages">
-            <div id="welcome-message">Welcome to our chat! You can use this widget to find product information. Try entering a part number to get details.</div>
+            <div id="welcome-message">Welcome to our chat! Use this widget to find product information. Enter a part number to get details.</div>
         </div>
         <div id="input-container">
             <input type="text" id="message-input" placeholder="Type your message here..." />
-            <button id="send-button">Send</button>
+            <button id="send-button" title="Send">
+                <span class="send-icon">&#10148;</span> <!-- Unicode for a right arrow -->
+                <span class="checkmark"></span>
+                <div class="spinner"></div>
+            </button>
         </div>
     </div>
 
@@ -145,15 +330,107 @@
         const messagesContainer = document.getElementById('messages');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
+        const sendIcon = document.querySelector('.send-icon');
+        const checkmark = document.querySelector('.checkmark');
+        const spinner = document.querySelector('.spinner');
         const welcomeMessage = document.getElementById('welcome-message');
         let threadId = null;
 
-        sendButton.addEventListener('click', async () => {
+        function addMessageToChat(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender === 'user' ? 'user-message' : 'assistant-message'}`;
+            messageElement.textContent = message;
+            messagesContainer.appendChild(messageElement);
+            scrollToBottom();
+        }
+
+
+        function showTypingIndicator() {
+            const typingElement = document.createElement('div');
+            typingElement.className = 'typing-indicator';
+            typingElement.id = 'typing-indicator';
+            typingElement.innerHTML = '<div></div><div></div><div></div>';
+            messagesContainer.appendChild(typingElement);
+            scrollToBottom();
+        }
+
+        // Function to remove typing indicator
+        function removeTypingIndicator() {
+            const typingElement = document.getElementById('typing-indicator');
+            if (typingElement) {
+                messagesContainer.removeChild(typingElement);
+            }
+        }
+
+        // Function to scroll to the latest message
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Function to create ripple effect
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const rect = button.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            const size = Math.max(button.clientWidth, button.clientHeight);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            ripple.classList.add('ripple');
+
+            // Remove existing ripple
+            const existingRipple = button.getElementsByClassName('ripple')[0];
+            if (existingRipple) {
+                existingRipple.remove();
+            }
+
+            button.appendChild(ripple);
+        }
+
+        // Function to handle send button animation
+        function animateSendButton() {
+            // Add ripple effect
+            // Note: 'event' is not accessible here. We'll need to pass the event or handle ripple differently.
+            // To solve this, we'll modify the handleSendMessage to accept the event.
+            // For now, we'll skip the ripple effect when triggered via Enter key.
+            
+            // Transform send icon to checkmark
+            sendIcon.classList.add('sent');
+            checkmark.classList.add('visible');
+
+            // Show spinner
+            spinner.classList.add('visible');
+
+            // After animation, revert back to original state
+            setTimeout(() => {
+                sendIcon.classList.remove('sent');
+                checkmark.classList.remove('visible');
+                spinner.classList.remove('visible');
+            }, 600); // Duration should match the animation duration
+        }
+
+        // Function to handle send message
+        async function handleSendMessage(event) {
+            if (event) {
+                event.preventDefault();
+            }
             const userMessage = messageInput.value.trim();
             if (!userMessage) return;
 
             addMessageToChat(userMessage, 'user');
             messageInput.value = '';
+
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'none';
+            }
+
+            showTypingIndicator();
+
+            // Animate send button
+            animateSendButton();
 
             try {
                 const response = await fetch('/chat', {
@@ -166,26 +443,31 @@
                         threadId: threadId
                     })
                 });
+
                 const data = await response.json();
                 threadId = data.threadId;
+
+                removeTypingIndicator();
                 addMessageToChat(data.response, 'assistant');
             } catch (error) {
                 console.error('Error:', error);
-                addMessageToChat('Chat is under construction. Please try again at a later time.', 'assistant');
+                removeTypingIndicator();
+                addMessageToChat('Chat is under construction. Please try again later.', 'assistant');
             }
+        }
 
-            if (welcomeMessage) {
-                welcomeMessage.style.display = 'none';
-            }
+        // Event listener for send button click
+        sendButton.addEventListener('click', (event) => {
+            createRipple(event);
+            handleSendMessage(event);
         });
 
-        function addMessageToChat(message, sender) {
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${sender === 'user' ? 'user-message' : 'assistant-message'}`;
-            messageElement.textContent = message;
-            messagesContainer.appendChild(messageElement);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+        // Event listener for Enter key
+        messageInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                handleSendMessage(event);
+            }
+        });
     </script>
 </body>
 </html>
