@@ -310,6 +310,7 @@
             }
         }
     </style>
+
 </head>
 <body>
     <div id="chat-container">
@@ -343,7 +344,6 @@
             messagesContainer.appendChild(messageElement);
             scrollToBottom();
         }
-
 
         function showTypingIndicator() {
             const typingElement = document.createElement('div');
@@ -392,11 +392,6 @@
 
         // Function to handle send button animation
         function animateSendButton() {
-            // Add ripple effect
-            // Note: 'event' is not accessible here. We'll need to pass the event or handle ripple differently.
-            // To solve this, we'll modify the handleSendMessage to accept the event.
-            // For now, we'll skip the ripple effect when triggered via Enter key.
-            
             // Transform send icon to checkmark
             sendIcon.classList.add('sent');
             checkmark.classList.add('visible');
@@ -409,7 +404,7 @@
                 sendIcon.classList.remove('sent');
                 checkmark.classList.remove('visible');
                 spinner.classList.remove('visible');
-            }, 600); // Duration should match the animation duration
+            }, 600); 
         }
 
         // Function to handle send message
@@ -433,7 +428,7 @@
             animateSendButton();
 
             try {
-                const response = await fetch('/chat', {
+                const response = await fetch('/chat', { // Ensure this URL matches your backend's URL
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -443,6 +438,10 @@
                         threadId: threadId
                     })
                 });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
 
                 const data = await response.json();
                 threadId = data.threadId;
