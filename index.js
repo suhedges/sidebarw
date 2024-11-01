@@ -67,7 +67,7 @@
         function showChatAI() {
             document.getElementById('main-options').style.display = 'none';
             document.getElementById('form-container').style.display = 'block';
-            document.querySelector('#form-container iframe').src = 'chat_ai.html';
+            document.querySelector('#form-container iframe').src = 'https://suhedges.github.io/sidebarw/chat_ai.html';
             document.getElementById('back-arrow').style.display = 'block';
         }
 
@@ -100,7 +100,7 @@
         function showQuickAnswers() {
             document.getElementById('main-options').style.display = 'none';
             document.getElementById('form-container').style.display = 'block';
-            document.querySelector('#form-container iframe').src = 'quick_ans.html';
+            document.querySelector('#form-container iframe').src = 'https://suhedges.github.io/sidebarw/quick_ans.html';
             document.getElementById('back-arrow').style.display = 'block';
         }
 
