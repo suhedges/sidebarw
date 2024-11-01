@@ -11,8 +11,8 @@ const app = express();
 
 // Enable CORS if frontend is hosted separately
 app.use(cors({
-    origin: '*', // Update this to your frontend's URL when deployed for better security
-    methods: ['POST'],
+    origin: '*', 
+    methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
 
@@ -63,7 +63,7 @@ app.post('/chat', async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to communicate with assistant." });
+    res.status(500).json({ error: error.message });
   }
 });
 
