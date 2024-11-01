@@ -43,6 +43,19 @@
             animation: fadeIn 0.5s ease;
         }
 
+        .assistant-name {
+            font-weight: bold;
+            font-size: 1em;
+            margin-right: 5px;
+            color: #3D7190; 
+        }
+
+        .assistant-content {
+            color: var(--text-color);
+            font-size: .9em;
+        }
+
+
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
@@ -93,6 +106,8 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             word-break: break-word; 
             overflow-wrap: break-word; 
+            font-size: 1em; 
+            line-height: 1.1;
         }
 
         @keyframes slideIn {
@@ -340,7 +355,26 @@
         function addMessageToChat(message, sender) {
             const messageElement = document.createElement('div');
             messageElement.className = `message ${sender === 'user' ? 'user-message' : 'assistant-message'}`;
-            messageElement.textContent = message;
+
+            if (sender === 'assistant') {
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'assistant-name';
+                nameSpan.textContent = 'Bert: ';
+
+
+                const contentSpan = document.createElement('span');
+                contentSpan.className = 'assistant-content';
+                contentSpan.textContent = message;
+
+
+                messageElement.appendChild(nameSpan);
+                messageElement.appendChild(contentSpan);
+            } else {
+
+                messageElement.textContent = message;
+            }
+
             messagesContainer.appendChild(messageElement);
             scrollToBottom();
         }
