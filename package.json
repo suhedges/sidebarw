@@ -2,7 +2,7 @@
   "name": "help-widget",
   "version": "1.0.0",
   "engines": {
-    "node": "14.x"
+    "node": "19.x"
   },
   "scripts": {
     "start": "node backend.js"
