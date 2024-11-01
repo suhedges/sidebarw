@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tri-State Bearing Widget</title>
     <style>
-        /* Existing styles */
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #6C757D;
+            --background-color: #ffffff;
+            --text-color: #212529;
+            --accent-color: #3D7190;
+            --hover-color: #e9ecef;
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,32 +23,31 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
             position: relative;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
 
         #tsb-widget {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 50px;
-            height: 50px;
-            background-color: #ffffff;
-            color: black;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
             border-radius: 50%;
-            box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            z-index: 100000;
+            z-index: 1000;
             cursor: pointer;
-            transition: 
-                width 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-                height 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-                transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-                background-color 0.3s ease-in-out,
-                box-shadow 0.4s ease-in-out;
+            transition: all var(--transition-speed) ease-in-out;
             transform-origin: bottom right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #tsb-widget:not(.expanded):hover {
@@ -48,19 +57,10 @@
 
 
         #tab {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            font-size: 24px;
-            text-align: center;
-            background-color: #f0620f;
+            font-size: 28px;
             color: #ffffff;
-            border-radius: 50%;
-            transition: 
-                transform 0.2s ease,
-                background-color 0.2s ease;
+            user-select: none;
+            transition: transform var(--transition-speed) ease-in-out;
         }
 
         #tab:hover {
@@ -81,20 +81,22 @@
 
         #widget-content {
             display: none;
+            width: 100%;
+            height: 100%;
             flex-direction: column;
             justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 10px;
-            text-align: center;
-            position: relative;
-            height: 100%;
+            animation: fadeIn 0.3s forwards;
+            gap: 10px; 
         }
 
-        .widget-option, .sub-options p, .location-header {
+
+        .sub-options p, .location-header {
             width: 100%;
             margin: 5px 0;
             padding: 10px;
-            background-color: #ffffff;
+            background-color: none;
             cursor: pointer;
             transition: background-color 0.2s ease, transform 0.2s ease;
             text-align: center;
@@ -102,17 +104,22 @@
             border-radius: 8px;
         }
 
-        .widget-option img {
-            display: block;
-            margin: 0 auto 5px auto;
-            width: 55px;
-            height: auto;
+        .widget-option p {
+            font-size: clamp(0.8em, 1.5vw, 1em); 
+            margin: 0;
         }
 
-        /* Shadow effect on hover */
-        .widget-option:hover, .sub-options p:hover, .location-header:hover {
-            background-color: #f0f0f0;
+        .widget-option img {
+            width: clamp(30px, 10vw, 50px); 
+            height: auto;
+            margin-bottom: 5px;
+            transition: filter 0.3s ease;
         }
+
+        .widget-option:hover img {
+            filter: invert(100%);
+        }
+
 
         .location-header {
             font-size: 12px;
@@ -150,14 +157,14 @@
         }
 
         #tsb-widget.expanded {
-            width: 400px;
-            height: 550px;
-            background-color: #ffffff;
-            transform: translateY(0) scale(1.05);
-            box-shadow: -4px 4px 15px rgba(0, 0, 0, 0.2);
-            bottom: 20px;
-            right: 20px;
-            border-radius: 8px;
+            width: 90vw;
+            max-width: 400px;
+            height: 90vh;
+            max-height: 600px;
+            border-radius: var(--border-radius);
+            background-color: var(--background-color);
+            flex-direction: column;
+            padding: 20px;
         }
 
         #tsb-widget:not(.expanded) {
@@ -167,18 +174,56 @@
 
         #tsb-widget.expanded #widget-content {
             display: flex;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-in-out forwards;
+            animation: fadeIn 0.3s forwards;
         }
 
         @keyframes fadeIn {
-            from {
-		opacity: 0;
-	    }
-	    to {
-		opacity: 1;
-	    }
-	}
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .widget-option {
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            background-color: none;
+            border-radius: var(--border-radius);
+            padding: 5px;
+            transition: transform var(--transition-speed), font-size var(--transition-speed);
+            box-sizing: border-box;
+        }
+
+        .widget-option:hover {
+            background-color: #3D7190;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+
+        .options-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%; 
+            overflow: hidden; 
+            gap: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
 
         #tsb-widget.expanded #tab {
             display: none;
@@ -186,24 +231,25 @@
 
         #close-widget {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            padding: 8px;
+            bottom: 15px;
+            right: 15px;
+            background-color: none;
+            border-radius: 50%;
+            padding: 10px;
             cursor: pointer;
-            background-color: #ffffff;
-            border-radius: 8px 8px 8px 8px;
-            transition: transform 0.4s ease-in-out;
+            transition: transform 0.05s ease-in-out;
+            transform: rotate(-90deg); 
         }
 
         #close-widget:hover {
-            transform: rotate(-90deg);
+            background-color: none;
+            transform: rotate(0deg);
         }
 
 
         #close-widget img {
-            width: 24px; /* Adjust the size as needed */
-            height: 24px; /* Adjust the size as needed */
-            display: block;
+            width: 20px;
+            height: 20px;
         }
 
         .sub-options, .location-options, #google-rating, #form-container {
@@ -225,79 +271,112 @@
         #tsb-widget.expanded .sub-options, .location-options {
             display: none;
             flex-direction: column;
-            justify-content: center; /* Vertically center support options */
-            align-items: center; /* Horizontally center support options */
+            justify-content: center;
+            align-items: center; 
             height: 100%;
             width: 230px;
         }
 
         #back-arrow {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
+            bottom: 15px;
+            left: 15px;
+            background-color: none;
+            border-radius: 50%;
+            padding: 10px;
             cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
             display: none;
-            background-color: #ffffff;
-            padding: 8px;
-            border-radius: 6px; 
-            transition: background-color 0.2s ease;
+            transform-origin: center;
         }
 
         #back-arrow:hover {
-            animation: rubberBand 1s ease infinite; 
+            background-color: none;
+            transform: scale(1.1);
         }
 
-
         #back-arrow img {
-            width: 24px; /* Adjust the size as needed */
-            height: 24px; /* Adjust the size as needed */
+            width: 25px;
+            height: 25px;
+        }
+
+        #back-arrow.animate-click {
+            animation: clickAnimation 0.3s ease;
+        }
+
+        @keyframes clickAnimation {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
         }
 
         @keyframes rubberBand {
-            0% {
-                transform: scale(1);
-            }
-            30% {
-                transform: scale(1.15, 0.85); /* Slightly reduced intensity */
-            }
-            40% {
-                transform: scale(0.85, 1.15); /* Slightly reduced intensity */
-            }
-            50% {
-                transform: scale(1.1, 0.9); /* Slightly reduced intensity */
-            }
-            65% {
-                transform: scale(0.95, 1.05); /* Slightly reduced intensity */
-            }
-            75% {
-                transform: scale(1.05, 0.95); /* Slightly reduced intensity */
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            30% { transform: scale(1.25, 0.75); }
+            40% { transform: scale(0.75, 1.25); }
+            50% { transform: scale(1.15, 0.85); }
+            65% { transform: scale(0.95, 1.05); }
+            75% { transform: scale(1.05, 0.95); }
+            100% { transform: scale(1); }
         }
 
+
         #google-rating {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             margin-top: 10px;
-            background-color: #ffffff;
             padding: 10px;
+            width: 90%;
+            background-color: #ffffff;
             border-radius: 4px;
+            text-align: center;
+            overflow-wrap: break-word;
         }
 
         #google-rating p {
-            font-size: 12px;
+            font-size: 1em;
             color: black;
             margin-bottom: 5px;
+            text-align: center;
         }
 
         #rating-stars {
-            font-size: 16px;
+            font-size: 1em; 
             color: gold;
+            white-space: nowrap;
+        }
+
+
+        .sub-options {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .sub-option {
+            width: 100%;
+            background-color: none;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            user-select: none;
+        }
+
+        .sub-option:hover {
+            background-color: #3D7190;
+            color: white;
+            font-weight: bold;
+            transform: translateY(-2px);
         }
 
         #form-container {
-            display: none;
-            flex-direction: column;
+            display: flex;
             justify-content: center;
             align-items: center;
             height: 100%;
@@ -306,23 +385,50 @@
         }
 
         #form-container iframe {
-            width: 100%;
-            height: 100%;
+            width: 90%; 
+            height: 90%; 
             border: none;
+            max-width: 100%; 
+            max-height: 100%;
+            object-fit: cover; 
         }
 
         .location-details-container {
             display: none;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+
+        #location-options, #location-details-container {
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            width: 100%;
             text-align: center;
-            font-size: 14px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            height: 100%; /* Ensure it takes up full height */
         }
+
+        .location-item {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 7px;
+            margin-bottom: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.1s, transform 0.1s;
+            user-select: none;
+        }
+
+        .location-item:hover {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
         .location-details-container p.clickable {
             cursor: pointer;
             transition: color 0.05s ease;
@@ -339,309 +445,128 @@
         .location-details-container p.clickable.email:hover {
             color: lightgreen;
         }
+
+        @media (max-width: 600px) {
+            #tsb-widget.expanded {
+                width: 100vw;
+                height: 100vh;
+                border-radius: 0;
+                bottom: 0;
+                right: 0;
+            }
+
+            #close-widget {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            #back-arrow {
+                bottom: 10px;
+                left: 10px;
+            }
+
+            .widget-option, .sub-option, .location-item {
+                padding: 8px;
+            }
+        }
     </style>
+<script src="https://suhedges.github.io/sidebarw/index.js" defer></script>
 </head>
 <body>
-    <!-- Widget Container -->
-    <div id="tsb-widget">
+    <div id="tsb-widget" onclick="expandWidget(event)">
         <div id="tab" onclick="expandWidget()">☰</div>
         <div id="widget-content">
-            <div id="close-widget" onclick="shrinkWidget()">
-                <img src="arrows_min.png" alt="Minimize" id="minimize-icon">
+            <div id="close-widget" onclick="shrinkWidget(event)">
+                <img src="https://suhedges.github.io/sidebarw/arrows_min.png" alt="Minimize">
             </div>
 
-            <div class="original-options">
-                <!-- New Chat Option -->
+            <div id="back-arrow" onclick="goBack()">
+                <img src="https://suhedges.github.io/sidebarw/back_arr.png" alt="Back">
+            </div>
+
+            <div class="options-container" id="main-options">
                 <div class="widget-option" onclick="showChatAI()">
-                    <img src="bert_ai.png" alt="Chat">
+                    <img src="https://suhedges.github.io/sidebarw/bert_ai.png" alt="Chat">
                     <p>Chat</p>
                 </div>
                 <div class="widget-option" onclick="showSupportOptions()">
-                    <img src="tsb_sup.png" alt="Support">
+                    <img src="https://suhedges.github.io/sidebarw/tsb_sup.png" alt="Support">
                     <p>Support</p>
                 </div>
                 <div class="widget-option" onclick="showLocationOptions()">
-                    <img src="tsb_loc.png" alt="Locations/Hours">
+                    <img src="https://suhedges.github.io/sidebarw/tsb_loc.png" alt="Locations/Hours">
                     <p>Locations/Hours</p>
                 </div>
                 <div class="widget-option" onclick="showQuickAnswers()">
-                    <img src="tsb_quick.png" alt="Quick Answers">
+                    <img src="https://suhedges.github.io/sidebarw/tsb_quick.png" alt="Quick Answers">
                     <p>Quick Answers</p>
                 </div>
+                <div id="google-rating">
+                    <p>Tri-State Bearing Co Inc. - Evansville, IN</p>
+                    <div id="rating-stars">
+                        ★★★★★ 5.0
+                    </div>
+                </div>
+
             </div>
 
             <div class="sub-options" id="support-options">
-                <p onclick="showForm('leave_message.html')">Leave a Message</p>
-                <p onclick="showForm('report_bug.html')">Report a Bug</p>
-                <p onclick="showForm('feedback_share.html')">Share Feedback</p>
+                <div class="sub-option" onclick="showForm('https://suhedges.github.io/sidebarw/leave_message.html')">
+                    <p>Leave a Message</p>
+                </div>
+                <div class="sub-option" onclick="showForm('https://suhedges.github.io/sidebarw/report_bug.html')">
+                    <p>Report a Bug</p>
+                </div>
+                <div class="sub-option" onclick="showForm('https://suhedges.github.io/sidebarw/feedback_share.html')">
+                    <p>Share Feedback</p>
+                </div>
             </div>
 
-            <div class="location-options" id="location-options">
-                <div class="location-header" onclick="showLocationDetails('EVANSVILLE, IN')">
+            <div class="sub-options" id="location-options">
+                <div class="location-item" onclick="showLocationDetails('EVANSVILLE, IN')">
                     EVANSVILLE, IN
                 </div>
-                <div class="location-header" onclick="showLocationDetails('JASPER, IN')">
+                <div class="location-item" onclick="showLocationDetails('JASPER, IN')">
                     JASPER, IN
                 </div>
-                <div class="location-header" onclick="showLocationDetails('VINCENNES, IN')">
+                <div class="location-item" onclick="showLocationDetails('VINCENNES, IN')">
                     VINCENNES, IN
                 </div>
-                <div class="location-header" onclick="showLocationDetails('BLOOMINGTON, IN')">
+                <div class="location-item" onclick="showLocationDetails('BLOOMINGTON, IN')">
                     BLOOMINGTON, IN
                 </div>
-                <div class="location-header" onclick="showLocationDetails('INDIANAPOLIS, IN')">
+                <div class="location-item" onclick="showLocationDetails('INDIANAPOLIS, IN')">
                     INDIANAPOLIS, IN
                 </div>
-                <div class="location-header" onclick="showLocationDetails('HENDERSON, KY')">
+                <div class="location-item" onclick="showLocationDetails('HENDERSON, KY')">
                     HENDERSON, KY
                 </div>
-                <div class="location-header" onclick="showLocationDetails('HOPKINSVILLE, KY')">
+                <div class="location-item" onclick="showLocationDetails('HOPKINSVILLE, KY')">
                     HOPKINSVILLE, KY
                 </div>
-                <div class="location-header" onclick="showLocationDetails('MADISONVILLE, KY')">
+                <div class="location-item" onclick="showLocationDetails('MADISONVILLE, KY')">
                     MADISONVILLE, KY
                 </div>
-                <div class="location-header" onclick="showLocationDetails('OWENSBORO, KY')">
+                <div class="location-item" onclick="showLocationDetails('OWENSBORO, KY')">
                     OWENSBORO, KY
                 </div>
-                <div class="location-header" onclick="showLocationDetails('DuBOIS, IL')">
+                <div class="location-item" onclick="showLocationDetails('DuBOIS, IL')">
                     DuBOIS, IL
                 </div>
             </div>
 
-            <div id="back-arrow" onclick="goBack()">
-                <img src="back_arr.png" alt="Back">
+            <div class="location-details-container" id="location-details-container">
+                <!-- Location details will be injected here -->
             </div>
 
-            <div id="form-container">
-                <iframe src=""></iframe>
+
+            <div id="form-container" style="display: none; width: 100%; height: 100%;">
+                <iframe src="" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
 
-            <div id="google-rating">
-                <p>Tri-State Bearing Co Inc. - Evansville, IN</p>
-                <div id="rating-stars">
-                    ★★★★★ 5.0
-                </div>
-            </div>
 
             <div id="location-details-container" class="location-details-container"></div>
         </div>
     </div>
-
-    <script>
-        function expandWidget() {
-            var widget = document.getElementById('tsb-widget');
-            widget.classList.add('expanded');
-            document.getElementById('widget-content').style.display = 'flex';
-            document.querySelector('.original-options').style.display = 'flex';
-            document.querySelector('.sub-options').style.display = 'none';
-            document.getElementById('back-arrow').style.display = 'none';
-            document.getElementById('google-rating').style.display = 'block';
-            document.querySelector('.location-options').style.display = 'none';
-            document.getElementById('form-container').style.display = 'none';
-            document.getElementById('location-details-container').style.display = 'none';
-
-            setTimeout(sendIframeSize, 100);         }
-
-        function shrinkWidget() {
-            var widget = document.getElementById('tsb-widget');
-            widget.classList.remove('expanded');
-            document.getElementById('widget-content').style.display = 'none';
-        
-            setTimeout(sendIframeSize, 100); 
-        }
-
-        function sendIframeSize() { 
-            var widget = document.getElementById('tsb-widget');
-            var height = widget.offsetHeight + 100;
-            var width = widget.offsetWidth + 100;  
-            var iframe = document.querySelector('#form-container iframe');
-    
-           
-            if (iframe && iframe.contentWindow) {
-                window.parent.postMessage({ height: height, width: width }, "*");
-            }
-
-            window.parent.postMessage({ height: height, width: width }, "https://23600tsb.stage.cimm2.com/");
-
-        }
-  
-        window.onload = function() {
-            sendIframeSize();
-        };
-        
-        window.onresize = function() {
-            sendIframeSize();
-        }; 
-
-        function showSupportOptions() {
-            document.querySelector('.original-options').style.display = 'none';
-            document.getElementById('support-options').style.display = 'flex';
-            document.getElementById('back-arrow').style.display = 'block';
-            document.getElementById('google-rating').style.display = 'none';
-            document.getElementById('form-container').style.display = 'none';
-            document.getElementById('location-details-container').style.display = 'none';
-        }
-    
-        function showLocationOptions() {
-            document.querySelector('.original-options').style.display = 'none';
-            document.getElementById('location-options').style.display = 'flex';
-            document.getElementById('back-arrow').style.display = 'block';
-            document.getElementById('google-rating').style.display = 'none';
-            document.getElementById('form-container').style.display = 'none';
-            document.getElementById('location-details-container').style.display = 'none';
-        }
-
-        function showChatAI() {
-            document.querySelector('.original-options').style.display = 'none';
-            document.getElementById('support-options').style.display = 'none';
-            document.getElementById('location-options').style.display = 'none';
-            document.getElementById('form-container').style.display = 'flex';
-            document.querySelector('#form-container iframe').src = 'chat_ai.html';
-            document.getElementById('back-arrow').style.display = 'block';
-            document.getElementById('google-rating').style.display = 'none';
-            document.getElementById('location-details-container').style.display = 'none';
-        }
-    
-        function goBack() {
-            if (document.getElementById('location-details-container').style.display === 'flex') {
-                showLocationOptions(); // Go back to the location list if details are shown
-            } else {
-                expandWidget(); // Go back to the home screen if location list is shown
-            }
-        }
-
-        function showForm(page) {
-            document.querySelector('.original-options').style.display = 'none';
-            document.getElementById('support-options').style.display = 'none';
-            document.getElementById('form-container').style.display = 'flex';
-            document.querySelector('#form-container iframe').src = page;
-            document.getElementById('back-arrow').style.display = 'block';
-            document.getElementById('google-rating').style.display = 'none';
-            document.getElementById('location-details-container').style.display = 'none';
-        }
-
-        function showQuickAnswers() {
-            document.querySelector('.original-options').style.display = 'none';
-            document.getElementById('support-options').style.display = 'none';
-            document.getElementById('location-options').style.display = 'none';
-            document.getElementById('form-container').style.display = 'flex';
-            document.querySelector('#form-container iframe').src = 'quick_ans.html';
-            document.getElementById('back-arrow').style.display = 'block';
-            document.getElementById('google-rating').style.display = 'none';
-            document.getElementById('location-details-container').style.display = 'none';
-        }
-
-        function showLocationDetails(location) {
-            document.getElementById('location-options').style.display = 'none';
-            var detailsContainer = document.getElementById('location-details-container');
-            detailsContainer.innerHTML = getLocationDetails(location);
-            detailsContainer.style.display = 'flex';
-            document.getElementById('back-arrow').style.display = 'block';
-        }
-
-        function getLocationDetails(location) {
-            var details = {
-                'EVANSVILLE, IN': `
-                        <p class="clickable address" onclick="openInMaps('2108 N FARES AVE, EVANSVILLE, IN 47711')">2108 N FARES AVE<br>EVANSVILLE, IN 47711</p>
-                        <p class="clickable phone" onclick="makeCall('812-425-1336')">812-425-1336</p>
-                        <p>Fax: 812-421-6788</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday: 7:30 AM - 6 PM; Saturday 7:30 AM - 12 PM</p>
-                `,
-                'JASPER, IN': `
-                        <p class="clickable address" onclick="openInMaps('211 W 28TH ST, JASPER, IN 47546')">211 W 28TH ST<br>JASPER, IN 47546</p>
-                        <p class="clickable phone" onclick="makeCall('812-482-5090')">812-482-5090</p>
-                        <p>Fax: 812-482-3815</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'HENDERSON, KY': `
-                        <p class="clickable address" onclick="openInMaps('414 N INGRAM, HENDERSON, KY 42420')">414 N INGRAM<br>HENDERSON, KY 42420</p>
-                        <p class="clickable phone" onclick="makeCall('270-826-0617')">270-826-0617</p>
-                        <p>Fax: 270-826-0989</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'VINCENNES, IN': `
-                        <p class="clickable address" onclick="openInMaps('1609 WILLOW ST, VINCENNES, IN 48591')">1609 WILLOW ST<br>VINCENNES, IN 48591</p>
-                        <p class="clickable phone" onclick="makeCall('812-882-2711')">812-882-2711</p>
-                        <p>Fax: 812-882-0322</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'BLOOMINGTON, IN': `
-                        <p class="clickable address" onclick="openInMaps('5117 S COMMERCIAL ST, BLOOMINGTON, IN 47403')">5117 S COMMERCIAL ST<br>BLOOMINGTON, IN 47403</p>
-                        <p class="clickable phone" onclick="makeCall('812-333-4331')">812-333-4331</p>
-                        <p>Fax: 812-333-5512</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'HOPKINSVILLE, KY': `
-                        <p class="clickable address" onclick="openInMaps('1800 VFW LANE, HOPKINSVILLE, KY 42240')">1800 VFW LANE<br>HOPKINSVILLE, KY 42240</p>
-                        <p class="clickable phone" onclick="makeCall('270-889-0530')">270-889-0530</p>
-                        <p>Fax: 270-889-0750</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'INDIANAPOLIS, IN': `
-                        <p class="clickable address" onclick="openInMaps('2205 ENTERPRISE PARK PLACE, INDIANAPOLIS, IN 46218')">2205 ENTERPRISE PARK PLACE<br>INDIANAPOLIS, IN 46218</p>
-                        <p class="clickable phone" onclick="makeCall('317-924-3287')">317-924-3287</p>
-                        <p>Fax: 317-924-3561</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'MADISONVILLE, KY': `
-                        <p class="clickable address" onclick="openInMaps('1115 ISLAND FORD RD, MADISONVILLE, KY 42431')">1115 ISLAND FORD RD<br>MADISONVILLE, KY 42431</p>
-                        <p class="clickable phone" onclick="makeCall('270-825-0788')">270-825-0788</p>
-                        <p>Fax: 270-825-0786</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'OWENSBORO, KY': `
-                        <p class="clickable address" onclick="openInMaps('1216 WING AVE, OWENSBORO, KY 42303')">1216 WING AVE<br>OWENSBORO, KY 42303</p>
-                        <p class="clickable phone" onclick="makeCall('270-228-4343')">270-228-4343</p>
-                        <p>Fax: 270-684-6673</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `,
-                'DuBOIS, IL': `
-                        <p class="clickable address" onclick="openInMaps('716 HWY 51, DuBOIS, IL 62831')">716 HWY 51<br>DuBOIS, IL 62831</p>
-                        <p class="clickable phone" onclick="makeCall('618-787-2117')">618-787-2117</p>
-                        <p>Fax: 618-787-2015</p>
-                        <p class="clickable email" onclick="sendEmail('customerservice@tristate-bearing.com')">Email: customerservice@tristate-bearing.com</p>
-                        <p>Office Hours: Monday-Friday 7:30 AM - 5 PM</p>
-                `
-            };
-
-            return details[location] || '<p>Location details not found.</p>';
-        }
-
-        function openInMaps(address) {
-            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`);
-        }
-
-        function makeCall(phoneNumber) {
-            window.open(`tel:${phoneNumber}`);
-        }
-
-        function sendEmail(emailAddress) {
-            window.open(`mailto:${emailAddress}`);
-        }
-        document.addEventListener('click', function(event) {
-            var widget = document.getElementById('tsb-widget');
-            if (!widget.contains(event.target) && widget.classList.contains('expanded')) {
-                shrinkWidget();
-            }
-        });
-
-        window.addEventListener('message', function(event) {
-            if (event.origin === "https://23600tsb.stage.cimm2.com/") { 
-                if (event.data === 'shrink-widget') {
-                    shrinkWidget();
-                }
-            }
-        });
-    </script>
 </body>
 </html>
