@@ -11,7 +11,7 @@ const app = express();
 
 // Enable CORS if frontend is hosted separately
 app.use(cors({
-    origin: '*', 
+    origin: 'https://suhedges.github.io', 
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
