@@ -236,14 +236,14 @@
         document.addEventListener('click', function(event) {
             var widget = document.getElementById('tsb-widget');
             if (!widget.contains(event.target) && widget.classList.contains('expanded')) {
-                shrinkWidget();
+                shrinkWidget(event);
             }
         });
 
         window.addEventListener('message', function(event) {
             if (event.origin === "https://23600tsb.stage.cimm2.com/") { 
                 if (event.data === 'shrink-widget') {
-                    shrinkWidget();
+                    shrinkWidget(event);
                 }
             }
         });
