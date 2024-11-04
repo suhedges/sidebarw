@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tri-State Bearing Widget</title>
-    <style>
+<style>
         :root {
             --primary-color: #007BFF;
             --secondary-color: #6C757D;
@@ -25,7 +19,6 @@
         body {
             font-family: 'Roboto', Arial, sans-serif;
             height: 100vh;
-            overflow: hidden;
             position: relative;
             background-color: var(--background-color);
             color: var(--text-color);
@@ -43,8 +36,9 @@
             overflow: hidden;
             z-index: 1000;
             cursor: pointer;
-            transition: all var(--transition-speed) ease-in-out;
-            transform-origin: bottom right;
+            transition: border-radius var(--transition-speed) ease, 
+                        background-color 0.1s ease, 
+                        transform 0.03s ease;            transform-origin: bottom right;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -81,14 +75,14 @@
 
         #widget-content {
             display: none;
-            width: 100%;
-            height: 100%;
+            width: 90%;
+            height: 90%;
             flex-direction: column;
             justify-content: space-between;
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.3s forwards;
-            gap: 10px; 
+            gap: 0px; 
         }
 
 
@@ -104,21 +98,6 @@
             border-radius: 8px;
         }
 
-        .widget-option p {
-            font-size: clamp(0.8em, 1.5vw, 1em); 
-            margin: 0;
-        }
-
-        .widget-option img {
-            width: clamp(30px, 10vw, 50px); 
-            height: auto;
-            margin-bottom: 5px;
-            transition: filter 0.3s ease;
-        }
-
-        .widget-option:hover img {
-            filter: invert(100%);
-        }
 
 
         .location-header {
@@ -175,6 +154,7 @@
         #tsb-widget.expanded #widget-content {
             display: flex;
             animation: fadeIn 0.3s forwards;
+            height: calc(100% - 20px);
         }
 
         @keyframes fadeIn {
@@ -195,11 +175,11 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 100%;
+            width: 80%;
             text-align: center;
             background-color: none;
             border-radius: var(--border-radius);
-            padding: 5px;
+            padding: 0px;
             transition: transform var(--transition-speed), font-size var(--transition-speed);
             box-sizing: border-box;
         }
@@ -208,6 +188,22 @@
             background-color: #3D7190;
             color: #ffffff;
             transform: translateY(-2px);
+        }
+
+        .widget-option p {
+            font-size: clamp(0.8em, 1.5vw, 1em); 
+            margin: 0;
+        }
+
+        .widget-option img {
+            width: clamp(30px, 10vw, 50px); 
+            height: auto;
+            margin-bottom: 5px;
+            transition: filter 0.3s ease;
+        }
+
+        .widget-option:hover img {
+            filter: invert(100%);
         }
 
 
@@ -260,6 +256,7 @@
             display: block;
         }
 
+
         #tsb-widget.expanded .original-options {
             display: flex;
             flex-direction: column;
@@ -301,20 +298,20 @@
         }
 
         #back-arrow.animate-click {
-            animation: clickAnimation 0.3s ease;
+            animation: clickAnimation 0.1s ease;
         }
 
         @keyframes clickAnimation {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.2) rotate(180deg); }
-            100% { transform: scale(1) rotate(360deg); }
+            0% { transform: scale(1); }
+            50% { transform: scale(.5); }
+            100% { transform: scale(.2); }
         }
 
         @keyframes rubberBand {
             0% { transform: scale(1); }
             30% { transform: scale(1.25, 0.75); }
-            40% { transform: scale(0.75, 1.25); }
-            50% { transform: scale(1.15, 0.85); }
+            40% { transform: scale(0.76, 1.25); }
+            50% { transform: scale(1.26, 0.85); }
             65% { transform: scale(0.95, 1.05); }
             75% { transform: scale(1.05, 0.95); }
             100% { transform: scale(1); }
@@ -446,6 +443,47 @@
             color: lightgreen;
         }
 
+        #maximize-widget {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: transparent;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            transition: opacity var(--transition-speed), transform var(--transition-speed);
+            display: none; 
+            opacity: 40%;
+        }
+
+        #maximize-widget:hover {
+            transform: scale(1.1);
+            opacity: 100%;
+        }
+
+        #maximize-widget img {
+            width: 20px;
+            height: 20px;
+        }
+
+        #tsb-widget.expanded #maximize-widget {
+            display: block;
+        }
+
+        #tsb-widget.expanded.maximized {
+            width: 40vw;
+            height: 100vh;
+            max-width: 40vw;
+            max-height: 100vh;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: auto;
+            border-radius: 0;
+            position: fixed;
+            padding: 20px;
+        }
+
         @media (max-width: 600px) {
             #tsb-widget.expanded {
                 width: 100vw;
@@ -470,18 +508,22 @@
             }
         }
     </style>
-<script src="https://suhedges.github.io/sidebarw/index.js" defer></script>
+<script src="index.js"></script>
 </head>
 <body>
     <div id="tsb-widget" onclick="expandWidget(event)">
-        <div id="tab" onclick="expandWidget()">☰</div>
+        <div id="tab" onclick="expandWidget(event)">☰</div>
         <div id="widget-content">
-            <div id="close-widget" onclick="shrinkWidget(event)">
-                <img src="https://suhedges.github.io/sidebarw/arrows_min.png" alt="Minimize">
-            </div>
-
-            <div id="back-arrow" onclick="goBack()">
-                <img src="https://suhedges.github.io/sidebarw/back_arr.png" alt="Back">
+            <div id="widget-header">
+                <div id="maximize-widget" onclick="toggleMaximizeWidget(event)">
+                    <img src="https://suhedges.github.io/sidebarw/maximize.png" alt="Maximize">
+                </div>
+                <div id="close-widget" onclick="shrinkWidget(event)">
+                    <img src="https://suhedges.github.io/sidebarw/arrows_min.png" alt="Minimize">
+                </div>
+                <div id="back-arrow" onclick="goBack()">
+                    <img src="https://suhedges.github.io/sidebarw/back_arr.png" alt="Back">
+                </div>
             </div>
 
             <div class="options-container" id="main-options">
@@ -564,9 +606,6 @@
                 <iframe src="" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
 
-
-            <div id="location-details-container" class="location-details-container"></div>
         </div>
     </div>
-</body>
-</html>
+
