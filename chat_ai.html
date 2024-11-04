@@ -367,6 +367,9 @@
     </div>
 
     <script>
+
+        const renderer = new marked.Renderer();
+
         const messagesContainer = document.getElementById('messages');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -375,6 +378,26 @@
         const spinner = document.querySelector('.spinner');
         const welcomeMessage = document.getElementById('welcome-message');
         let threadId = null;
+
+        renderer.link = function(href, title, text) {
+            let link = `<a href="${href}" target="_blank" rel="noopener noreferrer">`;
+
+            if (title) {
+                link += `${text}</a>`;
+            } else {
+                link += `${text}</a>`;
+            }
+
+            return link;
+        };
+
+        // Set the custom renderer to Marked
+        marked.setOptions({
+            renderer: renderer,
+            breaks: true, // Optional: Enable line breaks
+            // You can add more options here if needed
+        });
+
 
         function addMessageToChat(message, sender) {
             const messageElement = document.createElement('div');
