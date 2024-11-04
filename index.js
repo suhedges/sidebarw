@@ -1,34 +1,67 @@
+        function toggleMaximizeWidget(event) {
+            event.stopPropagation(); 
+            var widget = document.getElementById('tsb-widget');
+            var maximizeIcon = document.querySelector('#maximize-widget img');
+
+            if (widget.classList.contains('maximized')) {
+                widget.classList.remove('maximized');
+                maximizeIcon.src = 'https://suhedges.github.io/sidebarw/maximize.png';
+            } else {
+                widget.classList.add('maximized');
+                maximizeIcon.src = 'https://suhedges.github.io/sidebarw/minimize.png';
+            }
+        }
+
         function expandWidget(event) {
             var widget = document.getElementById('tsb-widget');
             if (widget.classList.contains('expanded')) {
-                // Prevent expanding again if already expanded
                 return;
             }
-            event.stopPropagation(); // Prevent event from bubbling up
+            event.stopPropagation();
+
+            widget.classList.add('expanded');
+            widget.classList.remove('maximized'); // Ensure it's not maximized when expanding
+            document.querySelector('#maximize-widget img').src = 'https://suhedges.github.io/sidebarw/maximize.png';
 
             var content = document.getElementById('widget-content');
-            widget.classList.add('expanded');
             content.style.display = 'flex';
             content.style.opacity = '1';
 
+            // Reset all sub-views to default
             document.getElementById('main-options').style.display = 'flex';
+            document.getElementById('support-options').style.display = 'none';
+            document.getElementById('location-options').style.display = 'none';
+            document.getElementById('location-details-container').style.display = 'none';
+            document.getElementById('form-container').style.display = 'none';
             document.getElementById('back-arrow').style.display = 'none';
         }
 
+
         function shrinkWidget(event) {
-            event.stopPropagation(); // Prevent event from bubbling up
+            event.stopPropagation();
             var widget = document.getElementById('tsb-widget');
             var content = document.getElementById('widget-content');
 
-            // Start fade-out animation
             content.style.opacity = '0';
 
-            // Wait for the opacity transition to complete before hiding content and shrinking widget
+            widget.classList.remove('expanded', 'maximized');
+            document.querySelector('#maximize-widget img').src = 'https://suhedges.github.io/sidebarw/maximize.png';
+
             setTimeout(function() {
                 content.style.display = 'none';
-                widget.classList.remove('expanded');
-            }, 50);
+                
+                // Reset all sub-views to default
+                document.getElementById('main-options').style.display = 'flex';
+                document.getElementById('support-options').style.display = 'none';
+                document.getElementById('location-options').style.display = 'none';
+                document.getElementById('location-details-container').style.display = 'none';
+                document.getElementById('form-container').style.display = 'none';
+                document.getElementById('quick-answers').style.display = 'none'; 
+                document.getElementById('back-arrow').style.display = 'none';
+            }, 30);
         }
+
+
         function sendIframeSize() { 
             var widget = document.getElementById('tsb-widget');
             var height = widget.offsetHeight + 100;
