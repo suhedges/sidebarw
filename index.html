@@ -451,19 +451,23 @@
             border-radius: 50%;
             padding: 10px;
             cursor: pointer;
-            transition: opacity var(--transition-speed), transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
             display: none; 
-            opacity: 40%;
+            opacity: 20%;
         }
 
         #maximize-widget:hover {
-            transform: scale(1.1);
             opacity: 100%;
         }
 
         #maximize-widget img {
             width: 20px;
             height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        #maximize-widget:hover img {
+            transform: scale(1.2); 
         }
 
         #tsb-widget.expanded #maximize-widget {
