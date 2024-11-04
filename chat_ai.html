@@ -242,6 +242,29 @@
             opacity: 0;
         }
 
+        .assistant-content ul {
+            padding-left: 20px;
+            margin: 5px 0;
+        }
+
+        .assistant-content li {
+            margin-bottom: 5px;
+        }
+
+        .assistant-content strong {
+            font-weight: 700;
+        }
+
+        .assistant-content a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .assistant-content a:hover {
+            text-decoration: underline;
+        }
+
+
         .checkmark {
             position: absolute;
             width: 20px;
@@ -325,7 +348,8 @@
             }
         }
     </style>
-
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 </head>
 <body>
     <div id="chat-container">
@@ -357,28 +381,32 @@
             messageElement.className = `message ${sender === 'user' ? 'user-message' : 'assistant-message'}`;
 
             if (sender === 'assistant') {
-
                 const nameSpan = document.createElement('span');
                 nameSpan.className = 'assistant-name';
                 nameSpan.textContent = 'Bert: ';
 
-
                 const contentSpan = document.createElement('span');
                 contentSpan.className = 'assistant-content';
-                contentSpan.textContent = message;
 
+                // Parse Markdown to HTML
+                const rawHtml = marked.parse(message);
+
+                // Sanitize the HTML to prevent XSS
+                const sanitizedHtml = DOMPurify.sanitize(rawHtml);
+
+                // Insert the sanitized HTML
+                contentSpan.innerHTML = sanitizedHtml;
 
                 messageElement.appendChild(nameSpan);
                 messageElement.appendChild(contentSpan);
             } else {
-
+                // For user messages, keep it as plain text
                 messageElement.textContent = message;
             }
 
             messagesContainer.appendChild(messageElement);
             scrollToBottom();
         }
-
         function showTypingIndicator() {
             const typingElement = document.createElement('div');
             typingElement.className = 'typing-indicator';
