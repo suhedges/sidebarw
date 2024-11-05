@@ -176,18 +176,23 @@
         }
 
         #input-wrapper {
-            position: relative;
-            width: 75%;
+            position: flex;
+            width: 100%;
             display: flex;
             align-items: center;
+            justify-content: center;
+            margin-left: 25px;
+            margin: 0 auto;
             overflow: hidden;
         }
 
         #message-input {
-            flex-grow: 1;
+            flex-shrink: 1;
+            width: 75%;
+            max-width: 500px;
             padding: 10px 45px 10px 15px;
             border: 1px solid #cccccc;
-            border-radius: 25px;
+            border-radius: 25px 0px 0px 25px;
             background-color: #ffffff;
             color: var(--text-color);
             font-size: 1em;
@@ -205,13 +210,12 @@
         }
 
         #send-button {
-            position: flex;
-            transform: translateX(-34px);
+            margin-left: -12px; 
             background-color: #3D7190;
             border: none;
             color: #ffffff;
             padding: 7px;
-            border-radius: 0% 50% 50% 0%;
+            border-radius: 0% 50% 50% 0%; 
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
             display: flex;
@@ -328,7 +332,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Welcome Message Styling */
         #welcome-message {
             text-align: center;
             color: var(--placeholder-color);
