@@ -180,6 +180,7 @@
             width: 75%;
             display: flex;
             align-items: center;
+            overflow: hidden;
         }
 
         #message-input {
@@ -204,14 +205,12 @@
         }
 
         #send-button {
-            position: absolute;
-            right: 0px; 
-            top: 50%;
-            transform: translateY(-50%);
+            position: flex;
+            transform: translateX(-34px);
             background-color: #3D7190;
             border: none;
             color: #ffffff;
-            padding: 6px;
+            padding: 7px;
             border-radius: 0% 50% 50% 0%;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
