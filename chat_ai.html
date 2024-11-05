@@ -169,23 +169,29 @@
             display: flex;
             padding: 15px;
             background-color: #ffffff;
-            align-items: center;
             justify-content: center;
             gap: 10px;
             border-top: 1px solid #e0e0e0;
-            width: 80%;
+            width: 85%;
+        }
+
+        #input-wrapper {
+            position: relative;
+            width: 75%;
+            display: flex;
+            align-items: center;
         }
 
         #message-input {
             flex-grow: 1;
-            padding: 10px 15px;
+            padding: 10px 45px 10px 15px;
             border: 1px solid #cccccc;
             border-radius: 25px;
             background-color: #ffffff;
             color: var(--text-color);
             font-size: 1em;
             outline: none;
-            transition: background-color 0.3s, border-color 0.3s;
+            transition: background-color 0.3s, border-color 0.3s;     
         }
 
         #message-input::placeholder {
@@ -198,30 +204,30 @@
         }
 
         #send-button {
-            position: relative;
+            position: absolute;
+            right: 0px; 
+            top: 50%;
+            transform: translateY(-50%);
             background-color: #3D7190;
             border: none;
             color: #ffffff;
-            padding: 8px 8px;
-            border-radius: 50%;
+            padding: 6px;
+            border-radius: 0% 50% 50% 0%;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            align-content: center;
             font-size: 1.2em;
             overflow: hidden;
         }
 
         #send-button:hover {
             background-color: #B4C8D5;
-            transform: scale(1.05);
         }
 
         #send-button:active {
             background-color: #B4C8D5;
-            transform: scale(0.95);
         }
 
         .ripple {
@@ -363,14 +369,15 @@
             <div id="welcome-message">Welcome to our chat! Use this widget to find product information. Enter a part number to get details.</div>
         </div>
         <div id="input-container">
-            <input type="text" id="message-input" placeholder="Type your message here..." />
-            <button id="send-button" title="Send">
-                <span class="send-icon">&#10148;</span> <!-- Unicode for a right arrow -->
-                <span class="checkmark"></span>
-                <div class="spinner"></div>
-            </button>
+            <div id="input-wrapper">
+                <input type="text" id="message-input" placeholder="Type your message here..." />
+                <button id="send-button" title="Send">
+                    <span class="send-icon">&#10148;</span> <!-- Unicode for a right arrow -->
+                    <span class="checkmark"></span>
+                    <div class="spinner"></div>
+                </button>
+            </div>
         </div>
-    </div>
 
     <script>
 
