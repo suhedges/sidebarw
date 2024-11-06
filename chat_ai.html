@@ -423,9 +423,6 @@
             const messageElement = document.createElement('div');
             messageElement.className = `message ${sender === 'user' ? 'user-message' : 'assistant-message'}`;
 
-            // Filter out document references like 
-            const filteredMessage = message.replace(/【\d+:\d*†[^】]+】/g, '');
-
             if (sender === 'assistant') {
                 const nameSpan = document.createElement('span');
                 nameSpan.className = 'assistant-name';
@@ -435,7 +432,7 @@
                 contentSpan.className = 'assistant-content';
 
                 // Convert URLs and emails to links using Linkify
-                const linkifiedText = linkifyHtml(filteredMessage, {
+                const linkifiedText = linkifyHtml(message, {
                     defaultProtocol: 'https',
                     target: '_blank',
                     rel: 'noopener noreferrer'
@@ -454,7 +451,7 @@
                 messageElement.appendChild(contentSpan);
             } else {
                 // For user messages, keep it as plain text
-                messageElement.textContent = filteredMessage;
+                messageElement.textContent = message;
             }
 
             messagesContainer.appendChild(messageElement);
