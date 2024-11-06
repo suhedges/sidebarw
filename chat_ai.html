@@ -442,7 +442,7 @@
                 const rawHtml = marked.parse(linkifiedText);
 
                 // Sanitize the HTML to prevent XSS
-                const sanitizedHtml = DOMPurify.sanitize(rawHtml);
+                const sanitizedHtml = DOMPurify.sanitize(rawHtml, { ADD_ATTR: ['target', 'rel'] });
 
                 // Insert the sanitized HTML
                 contentSpan.innerHTML = sanitizedHtml;
