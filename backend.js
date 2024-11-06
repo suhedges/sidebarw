@@ -58,6 +58,7 @@ app.post('/chat', async (req, res) => {
         }
       })
       .on('end', () => {
+        responseText = responseText.replace(/【.*?】/g, '');
         res.json({ threadId: thread.id, response: responseText });
       });
 
