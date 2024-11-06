@@ -50,7 +50,12 @@ app.post('/chat', async (req, res) => {
       assistant_id: assistantId
     })
       .on('textDelta', (textDelta) => {
-        responseText += textDelta.value;
+        console.log('Received textDelta:', textDelta);
+        if (typeof textDelta.value === 'string') {
+          responseText += textDelta.value;
+        } else if (typeof textDelta.value === 'object' && textDelta.value.text) {
+          responseText += textDelta.value.text; 
+        }
       })
       .on('end', () => {
         res.json({ threadId: thread.id, response: responseText });
