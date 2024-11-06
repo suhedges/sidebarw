@@ -1,3 +1,5 @@
+<!-- chat_ai.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,7 +60,6 @@
             color: var(--text-color);
             font-size: .9em;
         }
-
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -177,12 +178,10 @@
         }
 
         #input-wrapper {
-            position: flex;
-            width: 100%;
             display: flex;
+            width: 100%;
             align-items: center;
             justify-content: center;
-            margin-left: 25px;
             margin: 0 auto;
             overflow: hidden;
         }
@@ -224,6 +223,7 @@
             justify-content: center;
             font-size: 1.2em;
             overflow: hidden;
+            position: relative; /* Added to position ripple correctly */
         }
 
         #send-button:hover {
@@ -280,7 +280,6 @@
             text-decoration: underline;
         }
 
-
         .checkmark {
             position: absolute;
             width: 20px;
@@ -311,7 +310,6 @@
         .checkmark.visible::after {
             opacity: 1;
         }
-
 
         .spinner {
             position: absolute;
@@ -364,6 +362,7 @@
             }
         }
     </style>
+    <!-- Include Marked and DOMPurify libraries -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 </head>
@@ -382,11 +381,13 @@
                 </button>
             </div>
         </div>
+    </div>
 
     <script>
-
+        // Initialize Marked renderer
         const renderer = new marked.Renderer();
 
+        // Reference to DOM elements
         const messagesContainer = document.getElementById('messages');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -396,6 +397,7 @@
         const welcomeMessage = document.getElementById('welcome-message');
         let threadId = null;
 
+        // Custom link renderer to ensure links open in a new tab and are sanitized
         renderer.link = function(href, title, text) {
             let link = `<a href="${href}" target="_blank" rel="noopener noreferrer">`;
 
@@ -408,14 +410,18 @@
             return link;
         };
 
-        // Set the custom renderer to Marked
+        // Set Marked options with the custom renderer
         marked.setOptions({
             renderer: renderer,
-            breaks: true, // Optional: Enable line breaks
-            // You can add more options here if needed
+            breaks: true, // Enable line breaks
+            // Additional options can be added here
         });
 
-
+        /**
+         * Adds a message to the chat interface.
+         * @param {string} message - The message content.
+         * @param {string} sender - 'user' or 'assistant'.
+         */
         function addMessageToChat(message, sender) {
             const messageElement = document.createElement('div');
             messageElement.className = `message ${sender === 'user' ? 'user-message' : 'assistant-message'}`;
@@ -447,6 +453,10 @@
             messagesContainer.appendChild(messageElement);
             scrollToBottom();
         }
+
+        /**
+         * Shows the typing indicator.
+         */
         function showTypingIndicator() {
             const typingElement = document.createElement('div');
             typingElement.className = 'typing-indicator';
@@ -456,7 +466,9 @@
             scrollToBottom();
         }
 
-        // Function to remove typing indicator
+        /**
+         * Removes the typing indicator.
+         */
         function removeTypingIndicator() {
             const typingElement = document.getElementById('typing-indicator');
             if (typingElement) {
@@ -464,12 +476,17 @@
             }
         }
 
-        // Function to scroll to the latest message
+        /**
+         * Scrolls the messages container to the bottom.
+         */
         function scrollToBottom() {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Function to create ripple effect
+        /**
+         * Creates a ripple effect on the send button.
+         * @param {Event} event - The click event.
+         */
         function createRipple(event) {
             const button = event.currentTarget;
             const rect = button.getBoundingClientRect();
@@ -492,7 +509,9 @@
             button.appendChild(ripple);
         }
 
-        // Function to handle send button animation
+        /**
+         * Animates the send button to provide visual feedback.
+         */
         function animateSendButton() {
             // Transform send icon to checkmark
             sendIcon.classList.add('sent');
@@ -509,7 +528,10 @@
             }, 600); 
         }
 
-        // Function to handle send message
+        /**
+         * Handles sending a message to the backend and receiving a response.
+         * @param {Event} event - The event triggering the send.
+         */
         async function handleSendMessage(event) {
             if (event) {
                 event.preventDefault();
