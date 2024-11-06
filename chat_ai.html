@@ -1,3 +1,5 @@
+//CHAT_AI
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -366,6 +368,8 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/linkifyjs@3.1.0/dist/linkify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/linkifyjs@3.1.0/dist/linkify-html.min.js"></script>
 </head>
 <body>
     <div id="chat-container">
@@ -428,8 +432,15 @@
                 const contentSpan = document.createElement('span');
                 contentSpan.className = 'assistant-content';
 
+                // Convert URLs and emails to links using Linkify
+                const linkifiedText = linkifyHtml(message, {
+                    defaultProtocol: 'https',
+                    target: '_blank',
+                    rel: 'noopener noreferrer'
+                });
+
                 // Parse Markdown to HTML
-                const rawHtml = marked.parse(message);
+                const rawHtml = marked.parse(linkifiedText);
 
                 // Sanitize the HTML to prevent XSS
                 const sanitizedHtml = DOMPurify.sanitize(rawHtml);
@@ -447,6 +458,7 @@
             messagesContainer.appendChild(messageElement);
             scrollToBottom();
         }
+
         function showTypingIndicator() {
             const typingElement = document.createElement('div');
             typingElement.className = 'typing-indicator';
