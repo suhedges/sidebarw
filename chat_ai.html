@@ -232,12 +232,14 @@
 
         #input-container {
             display: flex;
+            flex-direction: column; /* Stack children vertically */
             padding: 15px;
             background-color: #ffffff;
-            justify-content: center;
+            align-items: center;
             gap: 10px;
             border-top: 1px solid #e0e0e0;
             width: 100%;
+            box-sizing: border-box; /* Ensure padding is included in width */
         }
 
         #input-wrapper {
@@ -250,23 +252,34 @@
             position: relative; /* Added for suggestion box positioning */
         }
 
+        #buttons-wrapper {
+            width: 700px;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between; /* Align buttons to opposite ends */
+            align-items: center;
+            padding: 0 10px; /* Optional: Add horizontal padding */
+        }
+
         #question-mark-icon {
-            background: none;
+            background-color: #325C75;
+            border-radius: 50%;
+            padding: 7px 15px;
             border: none;
-            font-size: 1.5em;
+            font-size: 2em;
             cursor: pointer;
-            color: var(--text-color);
-            margin-right: 10px;
+            color: white;
         }
 
         #question-mark-icon:hover {
-            color: var(--button-hover);
+            background-color: #B4C8D5;
+            color: black;
         }
 
         #message-input {
             flex-shrink: 1;
-            width: 85%;
-            max-width: 700px;
+            width: 700px;
+            max-width: 900px;
             padding: 10px 15px;
             border: 1px solid #cccccc;
             border-radius: 25px;
@@ -355,11 +368,10 @@
 
         #send-button {
             background-color: #3D7190;
-            margin-left: -20px;
             border: none;
             color: #ffffff;
-            padding: 7px 15px;
-            border-radius: 0% 50% 50% 0%;
+            padding: 13px 15px;
+            border-radius: 50% 50% 50% 50%;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s, height 0.2s ease;
             display: flex;
@@ -538,8 +550,10 @@
 
         <div id="input-container">
             <div id="input-wrapper">
-                <button id="question-mark-icon" title="Show Prompts">❓</button>
-                <textarea id="message-input" placeholder="Type your message here..."></textarea>
+                <textarea id="message-input" placeholder="Type your message here..." maxlength="10000"></textarea>
+            </div>
+            <div id="buttons-wrapper">
+                <button id="question-mark-icon" title="Show Prompts">?</button>
                 <button id="send-button" title="Send">
                     <span class="send-icon">&#10148;</span> <!-- Unicode for a right arrow -->
                     <span class="checkmark"></span>
@@ -547,7 +561,6 @@
                 </button>
             </div>
         </div>
-    </div>
 
     <script>
         const renderer = new marked.Renderer();
