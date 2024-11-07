@@ -59,7 +59,6 @@
             font-size: .9em;
         }
 
-
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
@@ -98,6 +97,71 @@
         #messages::-webkit-scrollbar-thumb {
             background: #3D7190;
             border-radius: 4px;
+        }
+
+        /* New Styles for Suggestion Container */
+        #suggestion-container {
+            width: 30%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        /* Suggestion Box with Sliding Animation */
+        .suggestion-box {
+            background-color: #f0f0f0;
+            border: 1px solid #cccccc;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transform: translateY(-100%);
+            opacity: 0;
+            animation: slideDown 0.3s forwards;
+            position: absolute;
+            width: 30%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .suggestion-box.hide {
+            animation: slideUp 0.3s forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+        }
+
+        /* Close Button Inside Suggestion Box */
+        .suggestion-close {
+            background: none;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            color: var(--text-color);
+            margin-left: 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .suggestion-close:hover {
+            color: #ff0000;
         }
 
         .message {
@@ -177,29 +241,48 @@
         }
 
         #input-wrapper {
-            position: flex;
-            width: 100%;
             display: flex;
+            width: 100%;
             align-items: center;
             justify-content: center;
-            margin-left: 25px;
             margin: 0 auto;
             overflow: hidden;
+            position: relative; /* Added for suggestion box positioning */
+        }
+
+        #question-mark-icon {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-color);
+            margin-right: 10px;
+        }
+
+        #question-mark-icon:hover {
+            color: var(--button-hover);
         }
 
         #message-input {
             flex-shrink: 1;
-            width: 75%;
-            max-width: 500px;
-            padding: 10px 45px 10px 15px;
+            width: 85%;
+            max-width: 700px;
+            padding: 10px 15px;
             border: 1px solid #cccccc;
-            border-radius: 25px 0px 0px 25px;
+            border-radius: 25px;
             background-color: #ffffff;
             color: var(--text-color);
             font-size: 1em;
             outline: none;
-            transition: background-color 0.3s, border-color 0.3s;     
+            resize: none; /* Prevent manual resizing */
+            overflow: hidden; /* Hide scrollbar */
+            height: 40px;
+            max-height: 100px; /* Maximum height */
+            line-height: 1.2;
+            box-sizing: border-box;
+            transition: height 0.2s ease; /* Smooth height transition */
         }
+
 
         #message-input::placeholder {
             color: var(--placeholder-color);
@@ -210,20 +293,81 @@
             border-color: var(--user-message);
         }
 
+        .prompt-button-alt1 {
+            background: linear-gradient(135deg, #3D7190, #84a5b9);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            color: #fff;
+        }
+
+        .prompt-button-alt2 {
+            background: linear-gradient(135deg, #84a5b9, #3D7190);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            color: #fff;
+        }
+
+
+        .exit-prompts-button, .back-button {
+            background: linear-gradient(135deg, #053856, #0b597f);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .sub-prompt-button {
+            background: linear-gradient(135deg, #84A5B9, #9bbfd1);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            color: #fff;
+        }
+
+
+
+        .prompt-button-alt1:hover,
+        .prompt-button-alt2:hover,
+        .exit-prompts-button:hover,
+        .back-button:hover,
+        .sub-prompt-button:hover {
+            filter: brightness(1.1);
+        }
+
+        .hidden {
+            display: none; !important;
+        }
+
         #send-button {
-            margin-left: -12px; 
             background-color: #3D7190;
+            margin-left: -20px;
             border: none;
             color: #ffffff;
-            padding: 7px;
-            border-radius: 0% 50% 50% 0%; 
+            padding: 7px 15px;
+            border-radius: 0% 50% 50% 0%;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.3s, transform 0.2s, height 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2em;
             overflow: hidden;
+            position: relative;
         }
 
         #send-button:hover {
@@ -258,6 +402,15 @@
             opacity: 0;
         }
 
+        #prompt-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+
         .assistant-content ul {
             padding-left: 20px;
             margin: 5px 0;
@@ -279,7 +432,6 @@
         .assistant-content a:hover {
             text-decoration: underline;
         }
-
 
         .checkmark {
             position: absolute;
@@ -311,7 +463,6 @@
         .checkmark.visible::after {
             opacity: 1;
         }
-
 
         .spinner {
             position: absolute;
@@ -362,6 +513,10 @@
                 padding: 8px 12px;
                 font-size: 1em;
             }
+
+            #suggestion-container {
+                width: 90%;
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/linkifyjs@4.1.3/dist/linkify.min.js"></script>
@@ -372,11 +527,19 @@
 <body>
     <div id="chat-container">
         <div id="messages">
-            <div id="welcome-message">Welcome to our chat! Use this widget to find product information. Enter a part number to get details.</div>
+            <div id="welcome-message">
+                Welcome to our chat! Use this widget to find product information. Enter a part number to get details.
+            </div>
+            <div id="prompt-container"></div>
         </div>
+
+        <!-- New Suggestion Container -->
+        <div id="suggestion-container"></div>
+
         <div id="input-container">
             <div id="input-wrapper">
-                <input type="text" id="message-input" placeholder="Type your message here..." />
+                <button id="question-mark-icon" title="Show Prompts">❓</button>
+                <textarea id="message-input" placeholder="Type your message here..."></textarea>
                 <button id="send-button" title="Send">
                     <span class="send-icon">&#10148;</span> <!-- Unicode for a right arrow -->
                     <span class="checkmark"></span>
@@ -387,7 +550,6 @@
     </div>
 
     <script>
-
         const renderer = new marked.Renderer();
 
         const messagesContainer = document.getElementById('messages');
@@ -397,7 +559,12 @@
         const checkmark = document.querySelector('.checkmark');
         const spinner = document.querySelector('.spinner');
         const welcomeMessage = document.getElementById('welcome-message');
+        const inputWrapper = document.getElementById('input-wrapper');
+        const suggestionContainer = document.getElementById('suggestion-container'); // New reference
+        const promptContainer = document.getElementById('prompt-container');
         let threadId = null;
+        let charactersTypedAfterSuggestion = 0; // Counter for auto-hide
+        let suggestionTimeout = null; // To store the timeout
 
         renderer.link = function(href, title, text) {
             let link = `<a href="${href}" target="_blank" rel="noopener noreferrer">`;
@@ -417,7 +584,6 @@
             breaks: true, // Optional: Enable line breaks
             // You can add more options here if needed
         });
-
 
         function addMessageToChat(message, sender) {
             const messageElement = document.createElement('div');
@@ -531,9 +697,15 @@
             addMessageToChat(userMessage, 'user');
             messageInput.value = '';
 
+            resetTextareaHeight();
+
             if (welcomeMessage) {
                 welcomeMessage.style.display = 'none';
             }
+
+            removeSuggestion(); // Remove any existing suggestion
+            clearTimeout(suggestionTimeout); // Clear any existing timeout
+            charactersTypedAfterSuggestion = 0; // Reset counter
 
             showTypingIndicator();
 
@@ -569,6 +741,263 @@
             }
         }
 
+        // PROMPTS AND SUBPROMPTS
+        const prompts = [
+            {
+                title: 'Product Information',
+                subPrompts: [
+                    {
+                        title: 'Pricing Details',
+                        response: 'Our pricing details are competitive and offer great value.'
+                    },
+                    {
+                        title: 'Technical Specifications',
+                        response: 'Here are the technical specifications...'
+                    }
+                ]
+            },
+            {
+                title: 'Support',
+                subPrompts: [
+                    {
+                        title: 'Warranty Information',
+                        response: 'Our products come with a 2-year warranty.'
+                    },
+                    {
+                        title: 'Return Policy',
+                        response: 'You can return products within 30 days of purchase.'
+                    }
+                ]
+            }
+
+        ];
+
+        function displayPrompts() {
+            promptContainer.innerHTML = ''; // Clear existing prompts
+
+            // Hide only assistant and user messages
+            const messageElements = document.querySelectorAll('.message');
+            messageElements.forEach(message => message.classList.add('hidden'));
+
+            prompts.forEach((prompt, index) => {
+                const promptButton = document.createElement('button');
+                promptButton.className = 'prompt-button';
+
+                // Apply alternating background gradients
+                if (index % 2 === 0) {
+                    promptButton.classList.add('prompt-button-alt1');
+                } else {
+                    promptButton.classList.add('prompt-button-alt2');
+                }
+
+                promptButton.textContent = prompt.title;
+                promptButton.onclick = () => displaySubPrompts(index);
+                promptContainer.appendChild(promptButton);
+            });
+
+            const exitButton = document.createElement('button');
+            exitButton.className = 'exit-prompts-button';
+            exitButton.textContent = 'Exit Prompts';
+            exitButton.onclick = exitPrompts;
+            promptContainer.appendChild(exitButton);
+        }
+
+        // Function to display sub-prompts
+        function displaySubPrompts(promptIndex) {
+            const promptContainer = document.getElementById('prompt-container');
+            promptContainer.innerHTML = ''; // Clear main prompts
+
+            const backButton = document.createElement('button');
+            backButton.className = 'back-button';
+            backButton.textContent = '← Back';
+            backButton.onclick = displayPrompts;
+            promptContainer.appendChild(backButton);
+
+            prompts[promptIndex].subPrompts.forEach((subPrompt) => {
+                const subPromptButton = document.createElement('button');
+                subPromptButton.className = 'sub-prompt-button';
+                subPromptButton.textContent = subPrompt.title;
+                subPromptButton.onclick = () => handleEmbeddedResponse(subPrompt.response);
+                
+                // Apply gradient background to each sub-prompt button
+                subPromptButton.style.background = 'linear-gradient(135deg, #84A5B9, #9bbfd1)';
+                subPromptButton.style.color = '#fff';
+
+                promptContainer.appendChild(subPromptButton);
+            });
+        }
+
+        function exitPrompts() {
+            promptContainer.innerHTML = ''; // Clear prompt view
+
+            // Show assistant and user messages
+            const messageElements = document.querySelectorAll('.message');
+            messageElements.forEach(message => message.classList.remove('hidden'));
+        }
+
+        // Function to display embedded responses
+        function handleEmbeddedResponse(responseText) {
+            addMessageToChat(responseText, 'assistant');
+
+            // Optionally hide the prompts after selection
+            const promptContainer = document.getElementById('prompt-container');
+            promptContainer.innerHTML = '';
+            exitPrompts();
+        }
+
+        // Keywords and their corresponding suggestions
+        const keywordSuggestions = {
+            'pricing': 'Are you interested in our pricing details?',
+            'warranty': 'Would you like information about our warranty?',
+            'return': 'Do you need assistance with our return policy?'
+        };
+
+        // Function to display suggestion with sliding animation
+        function displaySuggestion(suggestionText, responseText) {
+            // Check if a suggestion is already displayed
+            if (document.getElementById('suggestion-box')) return;
+
+            const suggestionBox = document.createElement('div');
+            suggestionBox.id = 'suggestion-box';
+            suggestionBox.className = 'suggestion-box';
+
+            // Add suggestion text and a close button
+            const suggestionTextSpan = document.createElement('span');
+            suggestionTextSpan.textContent = suggestionText;
+
+            const closeButton = document.createElement('button');
+            closeButton.className = 'suggestion-close';
+            closeButton.innerHTML = '&times;';
+            closeButton.onclick = () => hideSuggestion();
+
+            // When suggestion is clicked, display the response
+            suggestionTextSpan.onclick = () => {
+                hideSuggestion();
+                addMessageToChat(responseText, 'assistant');
+            };
+
+            suggestionBox.appendChild(suggestionTextSpan);
+            suggestionBox.appendChild(closeButton);
+
+            suggestionContainer.appendChild(suggestionBox);
+
+            charactersTypedAfterSuggestion = 0;
+            suggestionTimeout = setTimeout(() => {
+                hideSuggestion();
+            }, 30000);
+        }
+
+        // Function to handle suggestion display logic
+        function handleSuggestionDisplay(inputText) {
+            if (inputText.includes('pricing')) {
+                displaySuggestion('Are you interested in our pricing details?', 'Our pricing details are competitive and offer great value.');
+            } else if (inputText.includes('warranty')) {
+                displaySuggestion('Would you like information about our warranty?', 'Our products come with a 2-year warranty.');
+            } else if (inputText.includes('return')) {
+                displaySuggestion('Do you need assistance with our return policy?', 'You can return products within 30 days of purchase.');
+            } else {
+                removeSuggestion();
+            }
+        }
+
+        // Update the input event listener for message input
+        messageInput.addEventListener('input', function() {
+            const inputText = messageInput.value.toLowerCase();
+            autoExpandTextarea();
+            handleSuggestionDisplay(inputText);
+
+            // If a suggestion is active, track additional characters
+            const suggestionBox = document.getElementById('suggestion-box');
+            if (suggestionBox) {
+                charactersTypedAfterSuggestion += 1;
+                if (charactersTypedAfterSuggestion >= 20) {
+                    hideSuggestion();
+                    clearTimeout(suggestionTimeout);
+                }
+            }
+        });
+
+        // Show prompts when the question mark icon is clicked
+        document.getElementById('question-mark-icon').addEventListener('click', displayPrompts);
+
+
+        // Function to hide suggestion with sliding animation
+        function hideSuggestion() {
+            const suggestionBox = document.getElementById('suggestion-box');
+            if (!suggestionBox) return;
+
+            suggestionBox.classList.add('hide');
+
+            // Remove the suggestion box after the animation ends
+            suggestionBox.addEventListener('animationend', () => {
+                if (suggestionBox.parentNode) {
+                    suggestionBox.parentNode.removeChild(suggestionBox);
+                }
+            });
+        }
+
+        // Function to remove suggestion immediately
+        function removeSuggestion() {
+            hideSuggestion();
+            clearTimeout(suggestionTimeout);
+        }
+
+        // Function to auto-expand textarea
+        function autoExpandTextarea() {
+            const singleLineHeight = 40; // Set height for a single line
+            const maxHeight = 100; // Define the maximum height for the textarea
+
+            // Temporarily set the height to 'auto' to calculate accurate scrollHeight
+            messageInput.style.height = 'auto';
+
+            // Calculate the appropriate new height based on content
+            const newHeight = Math.min(messageInput.scrollHeight, maxHeight);
+
+            // Set the height to either the calculated height or the single line height
+            messageInput.style.height = `${newHeight}px`;
+            sendButton.style.height = `${newHeight}px`; // Sync the send button height
+        }
+
+        // Attach the auto-expand function to the input event on the textarea
+        messageInput.addEventListener('input', autoExpandTextarea);
+
+        // Reset the textarea height after message is submitted or cleared
+        function resetTextareaHeight() {
+            const singleLineHeight = 40;
+            messageInput.style.height = `${singleLineHeight}px`; // Reset to single-line height
+            sendButton.style.height = `${singleLineHeight}px`; // Reset send button height
+        }
+
+        // Event listener for input changes
+        messageInput.addEventListener('input', function() {
+            const inputText = messageInput.value.toLowerCase();
+            let suggestionFound = false;
+
+            autoExpandTextarea();
+
+            for (const keyword in keywordSuggestions) {
+                if (inputText.includes(keyword)) {
+                    displaySuggestion(keywordSuggestions[keyword]);
+                    suggestionFound = true;
+                    break;
+                }
+            }
+
+            if (!suggestionFound) {
+                removeSuggestion();
+            }
+
+            // If a suggestion is active, track additional characters
+            const suggestionBox = document.getElementById('suggestion-box');
+            if (suggestionBox) {
+                charactersTypedAfterSuggestion += 1;
+                if (charactersTypedAfterSuggestion >= 20) {
+                    hideSuggestion();
+                    clearTimeout(suggestionTimeout);
+                }
+            }
+        });
+
         // Event listener for send button click
         sendButton.addEventListener('click', (event) => {
             createRipple(event);
@@ -577,10 +1006,16 @@
 
         // Event listener for Enter key
         messageInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
+            if (event.key === 'Enter' && !event.shiftKey) { // Allow shift+Enter for new lines
+                event.preventDefault(); // Prevent default newline insertion
                 handleSendMessage(event);
             }
         });
+
+        // Call displayPrompts when the page loads
+        window.onload = function() {
+            displayPrompts();
+        };
     </script>
 </body>
 </html>
