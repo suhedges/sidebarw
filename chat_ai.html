@@ -294,7 +294,7 @@
         }
 
         .prompt-button-alt1 {
-            background: linear-gradient(135deg, #3D7190, #84a5b9);
+            background: #3D7190;
             border: none;
             padding: 10px 20px;
             border-radius: 20px;
@@ -305,7 +305,7 @@
         }
 
         .prompt-button-alt2 {
-            background: linear-gradient(135deg, #84a5b9, #3D7190);
+            background: #84a5b9;
             border: none;
             padding: 10px 20px;
             border-radius: 20px;
@@ -317,7 +317,7 @@
 
 
         .exit-prompts-button, .back-button {
-            background: linear-gradient(135deg, #053856, #0b597f);
+            background: #053856;
             border: none;
             padding: 10px 20px;
             border-radius: 20px;
@@ -329,7 +329,7 @@
         }
 
         .sub-prompt-button {
-            background: linear-gradient(135deg, #84A5B9, #9bbfd1);
+            background: #84A5B9;
             border: none;
             padding: 10px 20px;
             border-radius: 20px;
@@ -737,41 +737,66 @@
             } catch (error) {
                 console.error('Error:', error);
                 removeTypingIndicator();
-                addMessageToChat('Chat is under construction. Please try again later.', 'assistant');
+                addMessageToChat('Ope. Guess there is an error...this is awkward', 'assistant');
             }
         }
 
         // PROMPTS AND SUBPROMPTS
         const prompts = [
             {
-                title: 'Product Information',
+                title: 'Website help',
                 subPrompts: [
                     {
-                        title: 'Pricing Details',
-                        response: 'Our pricing details are competitive and offer great value.'
+                        title: 'How do I register?',
+                        response:  `
+        To create an account with Tri-State Bearing, follow these steps:
+
+        1. Navigate to Registration: Click on the "Sign In/Register" icon located at the top right corner of our website.
+        2. Select Registration Type:
+            - Current Business Customers: Choose the "I AM A CURRENT CUSTOMER BUT NEED AN ONLINE ACCOUNT" tab.
+            - New Retail Customers: Select the "New Retail Customer Account" tab.
+        3. Fill Out the Form: Provide the necessary details based on your customer type.
+        4. Submit: Click the "Register" button to submit your information.
+           
+        Once your registration is complete, you can access your account to manage orders, favorites, and more.
+
+                        `
                     },
                     {
-                        title: 'Technical Specifications',
-                        response: 'Here are the technical specifications...'
-                    }
-                ]
-            },
-            {
-                title: 'Support',
-                subPrompts: [
-                    {
-                        title: 'Warranty Information',
-                        response: 'Our products come with a 2-year warranty.'
+                        title: 'How do I create a saved cart?',
+                        response: 'To create a saved cart, add items to your cart, then click "Save Cart" when ready.'
                     },
                     {
-                        title: 'Return Policy',
-                        response: 'You can return products within 30 days of purchase.'
+                        title: 'How do I manage saved carts?',
+                        response: 'Access saved carts by selecting "My Saved Cart" in "My Account".'
+                    },
+                    {
+                        title: 'How do I view my order history?',
+                        response: 'Click "My Account" > "Orders History" to see your orders.'
+                    },
+                    {
+                        title: 'How do I add to favorites?',
+                        response: 'Click "+ Add to Favorites List" on an item page, and select or create a group.'
+                    },
+                    {
+                        title: 'How do I view and manage favorites?',
+                        response: 'Go to "My Favorites" in "My Account" to view and manage items.'
+                    },
+                    {
+                        title: 'How do I check open orders?',
+                        response: 'To check open orders, click "My Account" > "Open Orders".'
+                    },
+                    {
+                        title: 'How do I place a quick order?',
+                        response: 'In "My Account", select "Quick Order Pad" to enter items manually, paste details, or upload a file.'
+                    },
+                    {
+                        title: 'How do I request a new business account?',
+                        response: 'To request a new business account, go to "Sign In/Register", select "Register", then choose "REQUEST BUSINESS ACCOUNT".'
                     }
                 ]
             }
-
         ];
-
         function displayPrompts() {
             promptContainer.innerHTML = ''; // Clear existing prompts
 
@@ -847,11 +872,14 @@
 
         // Keywords and their corresponding suggestions
         const keywordSuggestions = {
-            'pricing': 'Are you interested in our pricing details?',
-            'warranty': 'Would you like information about our warranty?',
-            'return': 'Do you need assistance with our return policy?'
+            'register': 'Do you need help with the registration process?',
+            'saved cart': 'Would you like assistance with creating or managing saved carts?',
+            'order history': 'Need help with accessing your order history?',
+            'favorites': 'Do you want guidance on adding items to favorites?',
+            'open orders': 'Do you need help checking open orders?',
+            'quick order': 'Need help with placing a quick order?',
+            'business account': 'Would you like guidance on requesting a new business account?'
         };
-
         // Function to display suggestion with sliding animation
         function displaySuggestion(suggestionText, responseText) {
             // Check if a suggestion is already displayed
@@ -889,17 +917,24 @@
 
         // Function to handle suggestion display logic
         function handleSuggestionDisplay(inputText) {
-            if (inputText.includes('pricing')) {
-                displaySuggestion('Are you interested in our pricing details?', 'Our pricing details are competitive and offer great value.');
-            } else if (inputText.includes('warranty')) {
-                displaySuggestion('Would you like information about our warranty?', 'Our products come with a 2-year warranty.');
-            } else if (inputText.includes('return')) {
-                displaySuggestion('Do you need assistance with our return policy?', 'You can return products within 30 days of purchase.');
+            if (inputText.includes('register')) {
+                displaySuggestion('Do you need help with the registration process?', 'To register, follow the instructions under "Sign In/Register".');
+            } else if (inputText.includes('saved cart')) {
+                displaySuggestion('Need help with saved carts?', 'Select "My Saved Cart" under "My Account" to manage.');
+            } else if (inputText.includes('order history')) {
+                displaySuggestion('Need help with order history?', 'Visit "Orders History" in "My Account" to view your orders.');
+            } else if (inputText.includes('favorites')) {
+                displaySuggestion('Want guidance on managing favorites?', 'Use "My Favorites" under "My Account" to view and manage items.');
+            } else if (inputText.includes('open orders')) {
+                displaySuggestion('Do you need help checking open orders?', 'To check open orders, go to "My Account" and select "Open Orders".');
+            } else if (inputText.includes('quick order')) {
+                displaySuggestion('Need help with placing a quick order?', 'Access "Quick Order Pad" in "My Account" to place an order.');
+            } else if (inputText.includes('business account')) {
+                displaySuggestion('Do you need guidance on requesting a new business account?', 'To request a business account, go to "Sign In/Register" and select "REQUEST BUSINESS ACCOUNT".');
             } else {
                 removeSuggestion();
             }
         }
-
         // Update the input event listener for message input
         messageInput.addEventListener('input', function() {
             const inputText = messageInput.value.toLowerCase();
