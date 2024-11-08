@@ -35,7 +35,7 @@
         }
 
         #chat-container {
-            width: 100%;
+            width: 80%;
             height: 100%;
             max-width: 100%;
             background-color: var(--chat-background);
@@ -43,8 +43,8 @@
             flex-direction: column;
             overflow: hidden;
             animation: fadeIn 0.5s ease;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; 
+            align-items: center; 
         }
 
         .assistant-name {
@@ -56,9 +56,14 @@
 
         .assistant-content {
             color: var(--text-color);
-            font-size: .9em;
+            font-size: 0.9em;
+            display: inline-block; 
+            max-width: 100%; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+            white-space: pre-wrap;
+            box-sizing: border-box;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
@@ -165,6 +170,8 @@
         }
 
         .message {
+            width: auto;
+            max-width: 500px;
             padding: 12px 18px;
             border-radius: 20px;
             position: relative;
@@ -232,58 +239,34 @@
 
         #input-container {
             display: flex;
-            flex-direction: column; /* Stack children vertically */
+            flex-direction: column; 
             padding: 15px;
             background-color: #ffffff;
             align-items: center;
             gap: 10px;
             border-top: 1px solid #e0e0e0;
             width: 100%;
-            box-sizing: border-box; /* Ensure padding is included in width */
+            box-sizing: border-box; 
         }
 
         #input-wrapper {
             display: flex;
             width: 100%;
-            align-items: center;
+            align-items: stretch;
             justify-content: center;
             margin: 0 auto;
             overflow: hidden;
-            position: relative; /* Added for suggestion box positioning */
+            position: relative; 
         }
 
-        #buttons-wrapper {
-            width: 700px;
-            max-width: 900px;
-            display: flex;
-            justify-content: space-between; /* Align buttons to opposite ends */
-            align-items: center;
-            padding: 0 10px; /* Optional: Add horizontal padding */
-        }
 
-        #question-mark-icon {
-            background-color: #325C75;
-            border-radius: 50%;
-            padding: 7px 15px;
-            border: none;
-            font-size: 2em;
-            cursor: pointer;
-            color: white;
-        }
-
-        #question-mark-icon:hover {
-            background-color: #B4C8D5;
-            color: black;
-        }
 
         #message-input {
-            flex-shrink: 1;
-            width: 700px;
-            max-width: 900px;
+            flex: 1; /* Allows the textarea to take up available space */
             padding: 10px 15px;
-            border: 1px solid #cccccc;
-            border-radius: 25px;
-            background-color: #ffffff;
+            border: none; /* Remove borders for cleaner look */
+            border-radius: 0px;
+            background-color: #f4f4f4;
             color: var(--text-color);
             font-size: 1em;
             outline: none;
@@ -366,28 +349,60 @@
             display: none; !important;
         }
 
-        #send-button {
-            background-color: #3D7190;
-            border: none;
-            color: #ffffff;
-            padding: 13px 15px;
-            border-radius: 50% 50% 50% 50%;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s, height 0.2s ease;
+        #question-mark-icon {
+            flex: 0 0 50px; 
+            border-radius: 50% 0% 0% 50%;
+            height: 100%; 
             display: flex;
             align-items: center;
             justify-content: center;
+            box-sizing: border-box;
+            padding: 0; 
+            border: none; 
+            background-color: #3D7190;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
             font-size: 1.2em;
-            overflow: hidden;
-            position: relative;
         }
 
+        #send-button {
+            flex: 0 0 50px; 
+            height: 100%; 
+            border-radius: 0% 50% 50% 0%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            padding: 0; 
+            border: none; 
+            background-color: #3D7190;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 1.2em;
+        }
         #send-button:hover {
             background-color: #B4C8D5;
         }
 
         #send-button:active {
             background-color: #B4C8D5;
+        }
+
+        #buttons-wrapper {
+            width: 700px;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0; 
+        }
+
+
+        #question-mark-icon:hover {
+            background-color: #B4C8D5;
+            color: black;
         }
 
         .ripple {
@@ -550,12 +565,10 @@
 
         <div id="input-container">
             <div id="input-wrapper">
-                <textarea id="message-input" placeholder="Type your message here..." maxlength="10000"></textarea>
-            </div>
-            <div id="buttons-wrapper">
                 <button id="question-mark-icon" title="Show Prompts">?</button>
+                <textarea id="message-input" placeholder="Type your message here..." maxlength="10000"></textarea>
                 <button id="send-button" title="Send">
-                    <span class="send-icon">&#10148;</span> <!-- Unicode for a right arrow -->
+                    <span class="send-icon">&#10148;</span> 
                     <span class="checkmark"></span>
                     <div class="spinner"></div>
                 </button>
@@ -573,7 +586,7 @@
         const spinner = document.querySelector('.spinner');
         const welcomeMessage = document.getElementById('welcome-message');
         const inputWrapper = document.getElementById('input-wrapper');
-        const suggestionContainer = document.getElementById('suggestion-container'); // New reference
+        const suggestionContainer = document.getElementById('suggestion-container'); 
         const promptContainer = document.getElementById('prompt-container');
         let threadId = null;
         let charactersTypedAfterSuggestion = 0; // Counter for auto-hide
@@ -591,11 +604,10 @@
             return link;
         };
 
-        // Set the custom renderer to Marked
         marked.setOptions({
             renderer: renderer,
-            breaks: true, // Optional: Enable line breaks
-            // You can add more options here if needed
+            breaks: true, // Enable line breaks
+            // more options here if needed
         });
 
         function addMessageToChat(message, sender) {
@@ -610,20 +622,20 @@
                 const contentSpan = document.createElement('span');
                 contentSpan.className = 'assistant-content';
 
-                // Convert URLs and emails to links using Linkify
+                // Step 1: Convert URLs in plain text to links using Linkify
                 const linkifiedText = linkifyHtml(message, {
                     defaultProtocol: 'https',
                     target: '_blank',
                     rel: 'noopener noreferrer'
                 });
 
-                // Parse Markdown to HTML
+                // Step 2: Convert any Markdown syntax in the message to HTML
                 const rawHtml = marked.parse(linkifiedText);
 
-                // Sanitize the HTML to prevent XSS
+                // Step 3: Sanitize the resulting HTML to prevent XSS attacks
                 const sanitizedHtml = DOMPurify.sanitize(rawHtml, { ADD_ATTR: ['target', 'rel'] });
 
-                // Insert the sanitized HTML
+                // Step 4: Insert the sanitized HTML into the content span
                 contentSpan.innerHTML = sanitizedHtml;
 
                 messageElement.appendChild(nameSpan);
@@ -761,77 +773,28 @@
                 subPrompts: [
                     {
                         title: 'How do I register?',
-                        response:  `
-        To create an account with Tri-State Bearing, follow these steps:
+                        response: `To create an account with Tri-State Bearing, follow these steps: Navigate to Registration: Click on the <a href="https://www.tristate-bearing.com/Register" target="_blank"><strong>Sign In/Register</strong></a> icon located at the top right corner of our website. Select Registration Type: Current Business Customers: Choose the <strong>I AM A CURRENT CUSTOMER BUT NEED AN ONLINE ACCOUNT</strong> tab. New Retail Customers: Select the <strong>New Retail Customer Account</strong> tab. Fill Out the Form: Provide the necessary details based on your customer type. Click the <strong>Register</strong> button to submit your information. Once your registration is complete, you can access your account to manage orders, favorites, and more.`
 
-        1. Navigate to Registration: Click on the "Sign In/Register" icon located at the top right corner of our website.
-        2. Select Registration Type:
-            - Current Business Customers: Choose the "I AM A CURRENT CUSTOMER BUT NEED AN ONLINE ACCOUNT" tab.
-            - New Retail Customers: Select the "New Retail Customer Account" tab.
-        3. Fill Out the Form: Provide the necessary details based on your customer type.
-        4. Submit: Click the "Register" button to submit your information.
-           
-        Once your registration is complete, you can access your account to manage orders, favorites, and more.
-
-                        `
                     },
                     {
-                        title: 'How do I create a saved cart?',
-                        response: 'To create a saved cart, add items to your cart, then click "Save Cart" when ready.'
-                    },
-                    {
-                        title: 'How do I manage saved carts?',
-                        response: 'Access saved carts by selecting "My Saved Cart" in "My Account".'
-                    },
-                    {
-                        title: 'How do I view my order history?',
-                        response: 'Click "My Account" > "Orders History" to see your orders.'
-                    },
-                    {
-                        title: 'How do I add to favorites?',
-                        response: `
-        To add products to your favorites list:
-
-        1. Find the Item: Use the search bar or browse through our catalog to locate the desired product.
-        2. Add to Favorites: On the item's details page or within the catalog list view, click the "+ Add to Favorites List" button.
-        3. Organize Favorites:
-            - Select Existing Group: Choose an existing favorites group to categorize the item.
-            - Create New Group: Type a new group name and press enter to create a new category for your favorites.
-
-        Managing your favorite items helps you quickly access products you frequently purchase or are interested in.
-
-
-                        `
+                        title: 'How do I create or manage a saved cart?',
+                        response: 'To create a saved cart, add items to your cart, then click <strong>Save Cart</strong> when ready. To manage saved carts click <strong>My Account</strong> in the top right corner of the website, scroll until you see <strong>My Saved Carts</strong> and click.'
                     },
                     {
                         title: 'How do I view and manage favorites?',
-                        response: `
-                To access and organize your favorite products:
-
-        1. Go to My Account: Click on the "My Account" icon at the top right corner of the website.
-        2. Select My Favorites: Choose "My Favorites" from the drop-down menu.
-        3. Manage Favorites:
-            - View Items: See all your saved favorite items and groups.
-            - Edit Groups: Rename, organize, or delete favorite groups as needed.
-            - Remove Items: Delete any items you no longer wish to keep in your favorites.
-
-        Efficient management of your favorites enhances your shopping experience by providing quick access to preferred products.
-
-
-                        `
-
+                            response: `To access and organize your favorite products, click the <strong>My Account</strong> icon at the top right corner of the website. 
+Choose <strong>My Favorites</strong> from the drop-down menu. 
+Here you can manage favorites and see all your saved favorite items and groups. 
+You can rename, organize, delete favorite groups as needed, or delete any items you no longer wish to keep in your favorites. 
+Efficient management of your favorites enhances your shopping experience by providing quick access to preferred products.`
                     },
                     {
-                        title: 'How do I check open orders?',
-                        response: 'To check open orders, click "My Account" > "Open Orders".'
+                        title: 'How do I check open orders and order history?',
+                        response: 'To check open orders, click <strong>My Account</strong> in the top right corner of the website, scroll down and click <strong>Open Orders</strong> or <strong> Order History</strong>.'
                     },
                     {
                         title: 'How do I place a quick order?',
-                        response: 'In "My Account", select "Quick Order Pad" to enter items manually, paste details, or upload a file.'
-                    },
-                    {
-                        title: 'How do I request a new business account?',
-                        response: 'To request a new business account, go to "Sign In/Register", select "Register", then choose "REQUEST BUSINESS ACCOUNT".'
+                        response: 'Click <strong>My Account</strong> in the top right corner of the page, select <strong>Quick Order Pad</strong>. You can enter items in manually, copy and paste them, or upload an xlsx file. </strong>Enter</strong> and </strong>Tab</strong> will switch rows and you can right-click for options like adding/removing rows and undo/redo. You have options to combine, separate or remove duplicates quickly. </strong>Quick Order</strong> supports up to 40 entries. You can download an xlsx template <a href="https://www.tristate-bearing.com/ASSETS/WEB_THEMES/ECOMMERCE_STD_TEMPLATE_V2/images/QuickCartExample.xlsx" target="_blank"><strong>here</strong></a>'
                     }
                 ]
             }
@@ -1018,7 +981,6 @@
 
         // Function to auto-expand textarea
         function autoExpandTextarea() {
-            const singleLineHeight = 40; // Set height for a single line
             const maxHeight = 100; // Define the maximum height for the textarea
 
             // Temporarily set the height to 'auto' to calculate accurate scrollHeight
@@ -1027,39 +989,20 @@
             // Calculate the appropriate new height based on content
             const newHeight = Math.min(messageInput.scrollHeight, maxHeight);
 
-            // Set the height to either the calculated height or the single line height
+            // Set the height to the calculated height
             messageInput.style.height = `${newHeight}px`;
-            sendButton.style.height = `${newHeight}px`; // Sync the send button height
         }
-
-        // Attach the auto-expand function to the input event on the textarea
-        messageInput.addEventListener('input', autoExpandTextarea);
 
         // Reset the textarea height after message is submitted or cleared
         function resetTextareaHeight() {
-            const singleLineHeight = 40;
-            messageInput.style.height = `${singleLineHeight}px`; // Reset to single-line height
-            sendButton.style.height = `${singleLineHeight}px`; // Reset send button height
+            messageInput.style.height = 'auto'; // Let autoExpandTextarea handle the height
         }
 
-        // Event listener for input changes
+        // Consolidated 'input' event listener
         messageInput.addEventListener('input', function() {
             const inputText = messageInput.value.toLowerCase();
-            let suggestionFound = false;
-
             autoExpandTextarea();
-
-            for (const keyword in keywordSuggestions) {
-                if (inputText.includes(keyword)) {
-                    displaySuggestion(keywordSuggestions[keyword]);
-                    suggestionFound = true;
-                    break;
-                }
-            }
-
-            if (!suggestionFound) {
-                removeSuggestion();
-            }
+            handleSuggestionDisplay(inputText);
 
             // If a suggestion is active, track additional characters
             const suggestionBox = document.getElementById('suggestion-box');
@@ -1071,7 +1014,6 @@
                 }
             }
         });
-
         // Event listener for send button click
         sendButton.addEventListener('click', (event) => {
             createRipple(event);
