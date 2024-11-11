@@ -500,6 +500,15 @@
             padding: 20px;
         }
 
+
+        @media (max-width: 600px) {
+            #tsb-widget {
+                width: 80px; 
+                height: 80px; 
+                bottom: 15px;
+                right: 15px;
+            }
+
         @media (max-width: 600px) {
             #tsb-widget.expanded.maximized {
                 width: 100vw; 
@@ -537,7 +546,6 @@
                 padding: 12px;
             }
 
-            /* Font Sizes */
             #tab {
                 font-size: 24px; 
             }
@@ -546,29 +554,24 @@
                 font-size: 1.2em; 
             }
 
-            /* Ensure Images Scale Properly */
             .widget-option img {
                 width: 40px; 
                 height: 40px;
             }
 
-            /* Adjust the Widget Content Layout */
             #widget-content {
                 flex-direction: column;
                 gap: 10px;
             }
 
-            /* Make Buttons and Options Full Width */
             .widget-option, .sub-option, .location-item {
                 width: 90%; 
             }
 
-            /* Maximize Widget */
             #tsb-widget.expanded.maximized {
                 padding: 10px;
             }
 
-            /* Hide unnecessary elements to save space */
             #maximize-widget {
                 display: none;
             }
