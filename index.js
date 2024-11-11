@@ -20,7 +20,7 @@
             event.stopPropagation();
 
             widget.classList.add('expanded');
-            widget.classList.remove('maximized');
+            widget.classList.remove('maximized'); // Ensure it's not maximized when expanding
             document.querySelector('#maximize-widget img').src = 'https://suhedges.github.io/sidebarw/maximize.png';
 
             var content = document.getElementById('widget-content');
