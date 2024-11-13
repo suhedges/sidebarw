@@ -264,9 +264,12 @@
         #message-input {
             flex: 1; /* Allows the textarea to take up available space */
             padding: 10px 15px;
-            border: none; /* Remove borders for cleaner look */
+            border-top: 2px solid var(--text-color);
+            border-bottom: 2px solid var(--text-color);
+            border-left: none;
+            border-right: none;
             border-radius: 0px;
-            background-color: #f4f4f4;
+            background-color: #ffffff;
             color: var(--text-color);
             font-size: 1em;
             outline: none;
@@ -285,8 +288,7 @@
         }
 
         #message-input:focus {
-            background-color: #f9f9f9;
-            border-color: var(--user-message);
+
         }
 
         .prompt-button-alt1 {
@@ -351,16 +353,18 @@
 
         #question-mark-icon {
             flex: 0 0 50px; 
-            border-radius: 50% 0% 0% 50%;
+            border-radius: 20% 0% 0% 20%;
             height: 100%; 
             display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
             padding: 0; 
-            border: none; 
-            background-color: #3D7190;
-            color: #ffffff;
+            border-top: 2px solid var(--text-color);
+            border-bottom: 2px solid var(--text-color);
+            border-left: 2px solid var(--text-color);
+            border-right: none;
+            background-color: #ffffff;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
             font-size: 1.2em;
@@ -369,25 +373,28 @@
         #send-button {
             flex: 0 0 50px; 
             height: 100%; 
-            border-radius: 0% 50% 50% 0%;
+            border-radius: 0% 20% 20% 0%;
+            border-top: 2px solid var(--text-color);
+            border-bottom: 2px solid var(--text-color);
+            border-left: none;
+            border-right: 2px solid var(--text-color);
             display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
             padding: 0; 
-            border: none; 
-            background-color: #3D7190;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #d4d4d4;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.2s, transform 0.2s, opacity 0.2s ease;
             font-size: 1.2em;
         }
         #send-button:hover {
-            background-color: #B4C8D5;
+
         }
 
         #send-button:active {
-            background-color: #B4C8D5;
+
         }
 
         #buttons-wrapper {
@@ -400,9 +407,15 @@
         }
 
 
-        #question-mark-icon:hover {
-            background-color: #B4C8D5;
-            color: black;
+        .question-icon {
+            width: 24px; 
+            height: 24px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        #question-mark-icon:hover .question-icon {
+            transform: scale(1.1);
+            opacity: 0.8;
         }
 
         .ripple {
@@ -421,7 +434,14 @@
         }
 
         .send-icon {
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            width: 24px;
+            height: 24px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        #send-button:hover .send-icon {
+            transform: scale(1.1);
+            opacity: 0.8;
         }
 
         .send-icon.sent {
@@ -465,7 +485,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            border: 2px solid #ffffff;
+            border: 2px solid #182848;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -476,7 +496,7 @@
 
         .checkmark::after {
             content: '✔';
-            color: #ffffff;
+            color: #182848;
             font-size: 14px;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -565,10 +585,12 @@
 
         <div id="input-container">
             <div id="input-wrapper">
-                <button id="question-mark-icon" title="Show Prompts">?</button>
+                <button id="question-mark-icon" title="Show Prompts">
+                    <img src="question_mark.png" alt="Help" class="question-icon">
+                </button>
                 <textarea id="message-input" placeholder="Type your message here..." maxlength="10000"></textarea>
                 <button id="send-button" title="Send">
-                    <span class="send-icon">&#10148;</span> 
+                    <img src="plane_send.png" alt="Send" class="send-icon">
                     <span class="checkmark"></span>
                     <div class="spinner"></div>
                 </button>
@@ -728,6 +750,8 @@
                 welcomeMessage.style.display = 'none';
             }
 
+            // Hide prompts after submitting a message
+            exitPrompts();
             removeSuggestion(); // Remove any existing suggestion
             clearTimeout(suggestionTimeout); // Clear any existing timeout
             charactersTypedAfterSuggestion = 0; // Reset counter
@@ -762,10 +786,9 @@
             } catch (error) {
                 console.error('Error:', error);
                 removeTypingIndicator();
-                addMessageToChat('Ope. Guess there is an error...this is awkward', 'assistant');
+                addMessageToChat('Ope...beep boop...theres is an error...this is awkward', 'assistant');
             }
         }
-
         // PROMPTS AND SUBPROMPTS
         const prompts = [
             {
@@ -954,8 +977,13 @@ Efficient management of your favorites enhances your shopping experience by prov
             }
         });
 
-        // Show prompts when the question mark icon is clicked
-        document.getElementById('question-mark-icon').addEventListener('click', displayPrompts);
+        document.getElementById('question-mark-icon').addEventListener('click', () => {
+            if (promptContainer.innerHTML === '') {
+                displayPrompts();
+            } else {
+                exitPrompts();
+            }
+        });
 
 
         // Function to hide suggestion with sliding animation
