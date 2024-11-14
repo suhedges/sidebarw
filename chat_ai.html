@@ -255,7 +255,6 @@
             align-items: stretch;
             justify-content: center;
             margin: 0 auto;
-            overflow: hidden;
             position: relative; 
         }
 
@@ -295,22 +294,26 @@
             background: #3D7190;
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 15px;
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
             color: #fff;
+            max-width: 95%;
+            min-width: 75%;
         }
 
         .prompt-button-alt2 {
             background: #84a5b9;
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 15px;
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
             color: #fff;
+            max-width: 95%;
+            min-width: 75%;
         }
 
 
@@ -318,23 +321,27 @@
             background: #053856;
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 15px;
             cursor: pointer;
             font-size: 1em;
             margin-top: 10px;
             color: #fff;
             transition: background-color 0.3s;
+            max-width: 95%;
+            min-width: 75%;
         }
 
         .sub-prompt-button {
             background: #84A5B9;
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 15px;
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
             color: #fff;
+            max-width: 95%;
+            min-width: 75%;
         }
 
 
@@ -359,7 +366,7 @@
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            padding: 0; 
+            padding-left: 5px; 
             border-top: 2px solid var(--text-color);
             border-bottom: 2px solid var(--text-color);
             border-left: 2px solid var(--text-color);
@@ -455,6 +462,8 @@
             align-items: center;
             gap: 10px;
             margin: 20px 0;
+            max-width: 95%;
+            min-width: 75%;
         }
 
 
@@ -531,15 +540,86 @@
             to { transform: rotate(360deg); }
         }
 
+        .tooltip {
+            position: absolute;
+            left: 175%;
+            bottom: 100%;
+            transform: translate(-50%, -10px);
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+            color: 2e5670;
+            border: solid 1px #2e5670;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.6em;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .tooltip-arrow {
+            color: #d4d4d4;
+            position: absolute;
+            top: 100%;
+            left: 10%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #2e5670;
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        /* Hide the tooltip */
+        .tooltip.hidden {
+            display: none;
+        }
+
         #welcome-message {
             text-align: center;
+            font-size: .9em;
             max-width: 500px;
             color: var(--placeholder-color);
-            font-style: italic;
             padding: 10px;
             border-radius: 10px;
             background-color: #f0f0f0;
             animation: fadeIn 0.5s ease forwards;
+        }
+
+        #welcome-message p {
+            margin: 0 0 5px; 
+        }
+
+        #welcome-message ul {
+            list-style-type: none; 
+            padding-left: 5px; /* Keep some padding for indentation */
+            margin: 5px 0; /* Reduce space above and below list */
+        }
+
+        #welcome-message li {
+            margin-bottom: 5px; /* Adjust space between list items */
+            line-height: 1.2; /* Control line spacing within list items */
+        }
+
+        #quick-answers-link {
+            display: inline-block;
+            background-color: #3D7190;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #quick-answers-link:hover {
+            background-color: #2e5670;
         }
 
         @media (max-width: 500px) {
@@ -575,7 +655,14 @@
     <div id="chat-container">
         <div id="messages">
             <div id="welcome-message">
-                Welcome to our chat! Use this widget to find product information. Enter a part number to get details.
+                <p><strong>Hi, Bert here!</strong></p>
+                <p>I'm here to help you navigate and find the parts you need. Currently, I specialize in <b>Bearings</b> and <b>Seals</b></p>
+                <ul>
+                    <li>I can help find specific parts by size and type – for example, try asking "<b>I need a ball bearing with a 30mm ID, 62mm OD, and a 16mm width.</b>"</li>
+                    <li>I can help provide specs for a part number – for example, "<b>What are the specs for a 6203LL?</b>"</li>
+                </ul>
+                <p>Let’s get started!</p>
+                <p><a href="#" id="quick-answers-link">Click here to get quick answers to common questions!</a></p>
             </div>
             <div id="prompt-container"></div>
         </div>
@@ -583,18 +670,22 @@
         <!-- New Suggestion Container -->
         <div id="suggestion-container"></div>
 
-        <div id="input-container">
-            <div id="input-wrapper">
+        <div id="input-wrapper">
+            <div id="question-icon-wrapper" style="position: relative;">
                 <button id="question-mark-icon" title="Show Prompts">
                     <img src="question_mark.png" alt="Help" class="question-icon">
                 </button>
-                <textarea id="message-input" placeholder="Type your message here..." maxlength="10000"></textarea>
-                <button id="send-button" title="Send">
-                    <img src="plane_send.png" alt="Send" class="send-icon">
-                    <span class="checkmark"></span>
-                    <div class="spinner"></div>
-                </button>
+                <div id="tooltip" class="tooltip hidden">
+                    Click for quick answers
+                    <span class="tooltip-arrow"></span>
+                </div>
             </div>
+            <textarea id="message-input" placeholder="Type your message here..." maxlength="10000"></textarea>
+            <button id="send-button" title="Send">
+                <img src="plane_send.png" alt="Send" class="send-icon">
+                <span class="checkmark"></span>
+                <div class="spinner"></div>
+            </button>
         </div>
 
     <script>
@@ -630,6 +721,11 @@
             renderer: renderer,
             breaks: true, // Enable line breaks
             // more options here if needed
+        });
+
+        document.getElementById('quick-answers-link').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            displayPrompts();
         });
 
         function addMessageToChat(message, sender) {
@@ -825,9 +921,14 @@ Efficient management of your favorites enhances your shopping experience by prov
         function displayPrompts() {
             promptContainer.innerHTML = ''; // Clear existing prompts
 
-            // Hide only assistant and user messages
+            // Hide assistant and user messages
             const messageElements = document.querySelectorAll('.message');
             messageElements.forEach(message => message.classList.add('hidden'));
+
+            // **Hide the welcome message**
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'none';
+            }
 
             prompts.forEach((prompt, index) => {
                 const promptButton = document.createElement('button');
@@ -857,6 +958,12 @@ Efficient management of your favorites enhances your shopping experience by prov
             const promptContainer = document.getElementById('prompt-container');
             promptContainer.innerHTML = ''; // Clear main prompts
 
+            // **Hide the welcome message**
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'none';
+            }
+
+
             const backButton = document.createElement('button');
             backButton.className = 'back-button';
             backButton.textContent = '← Back';
@@ -883,6 +990,11 @@ Efficient management of your favorites enhances your shopping experience by prov
             // Show assistant and user messages
             const messageElements = document.querySelectorAll('.message');
             messageElements.forEach(message => message.classList.remove('hidden'));
+
+            // **Show the welcome message again**
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'block'; // or use '' to reset to default
+            }
         }
 
         // Function to display embedded responses
@@ -983,6 +1095,11 @@ Efficient management of your favorites enhances your shopping experience by prov
             } else {
                 exitPrompts();
             }
+
+            // Hide the tooltip immediately
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('visible');
+            tooltip.classList.add('hidden');
         });
 
 
@@ -1057,8 +1174,24 @@ Efficient management of your favorites enhances your shopping experience by prov
         });
 
         // Call displayPrompts when the page loads
+        //window.onload = function() {
+            //displayPrompts();
+        //};
+
         window.onload = function() {
-            displayPrompts();
+            // Show the tooltip
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('hidden');
+            tooltip.classList.add('visible');
+            
+            // After 5 seconds, hide the tooltip
+            setTimeout(function() {
+                tooltip.classList.remove('visible');
+                // After the transition ends, add the 'hidden' class
+                setTimeout(function() {
+                    tooltip.classList.add('hidden');
+                }, 300); // Match the CSS transition duration
+            }, 5000); // Tooltip is visible for 5 seconds
         };
     </script>
 </body>
