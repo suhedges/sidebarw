@@ -233,27 +233,41 @@
 
               #close-widget {
                   position: absolute;
-                  bottom: 15px;
-                  right: 15px;
+                  bottom: 0;
+                  right: 0;
                   background-color: none;
-                  border-radius: 50%;
-                  padding: 10px;
+                  padding: 20px;
                   cursor: pointer;
                   transition: transform 0.3s ease-in-out;
-                  transform: rotate(-90deg); 
+                  clip-path: polygon(100% 100%, 0 100%, 100% 0);
               }
 
               #close-widget:hover {
-                  background-color: none;
-                  transform: rotate(0deg);
+                  background-color: #f0620f;
               }
 
+              #close-widget:hover img,
+              #close-widget img:hover {
+                  filter: invert(100%);
+              }
 
               #close-widget img {
+                  transition: transform 0.3s ease-in-out;
+                  transform: rotate(0deg);
                   width: 20px;
                   height: 20px;
+                  position: relative; 
+                  right: -10px; 
+                  top: 10px;
               }
 
+              #close-widget img:hover {
+                  width: 20px;
+                  height: 20px;
+                  position: relative; 
+                  right: -10px; 
+                  top: 10px;
+              }
               .sub-options, .location-options, #google-rating, #form-container {
                   display: none;
               }
@@ -282,11 +296,11 @@
 
               #back-arrow {
                   position: absolute;
-                  bottom: 15px;
-                  left: 15px;
-                  background-color: none;
-                  border-radius: 50%;
-                  padding: 10px;
+                  bottom: 0px;
+                  left: 0px;
+                  background-color: transparent;
+                  clip-path: polygon(0 100%, 0 0, 100% 100%);
+                  padding: 20px;
                   cursor: pointer;
                   transition: background-color var(--transition-speed), transform var(--transition-speed);
                   display: none;
@@ -294,14 +308,22 @@
               }
 
               #back-arrow:hover {
-                  background-color: none;
-                  transform: scale(1.1);
+                  background-color: #3D7190;
               }
 
               #back-arrow img {
-                  width: 25px;
-                  height: 25px;
+                  width: 20px;
+                  height: 20px;
+                  position: relative; 
+                  left: -10px; 
+                  top: 10px;
               }
+
+              #back-arrow:hover img,
+              #back-arrow img:hover {
+                  filter: invert(100%);
+              }
+
 
               #back-arrow.animate-click {
                   animation: clickAnimation 0.1s ease;
@@ -505,7 +527,6 @@
                 --transition-speed: 0.3s;
             }
 
-            /* Global Styles */
             * {
                 margin: 0;
                 padding: 0;
@@ -572,7 +593,7 @@
                 padding: 20px;
             }
 
-            /* Tab Styles */
+
             #tab {
                 font-size: 28px;
                 color: #ffffff;
@@ -606,7 +627,7 @@
                 height: calc(100% - 20px);
             }
 
-            /* Options Container */
+
             .options-container {
                 flex: 1;
                 display: flex;
@@ -620,7 +641,7 @@
                 box-sizing: border-box;
             }
 
-            /* Widget Options */
+
             .widget-option {
                 display: flex;
                 flex-direction: column;
@@ -682,7 +703,6 @@
                 transform: translateY(-2px);
             }
 
-            /* Location Options */
             .location-item {
                 width: 100%;
                 background-color: #fff;
@@ -730,7 +750,6 @@
                 color: lightgreen;
             }
 
-            /* Form Container */
             #form-container {
                 display: none;
                 justify-content: center;
@@ -745,7 +764,7 @@
                 border: none;
             }
 
-            /* Header Icons */
+
             #widget-header {
                 position: absolute;
                 top: 15px;
@@ -786,12 +805,14 @@
                 transition: transform var(--transition-speed), opacity var(--transition-speed);
             }
 
+
+
             #back-arrow.show {
                 display: block;
             }
 
             #tsb-widget.expanded #back-arrow {
-                display: block;
+                display: none;
             }
 
             #maximize-widget {
@@ -802,9 +823,8 @@
                 opacity: 1;
             }
 
-            /* Close Widget Icon */
             #close-widget {
-                transform: rotate(-90deg); /* Keep rotated 90 degrees to the right */
+                transform: rotate(-90deg); 
                 top: 15px;
                 right: 15px;
                 bottom: auto;
@@ -859,26 +879,55 @@
                 padding: 10px;
             }
 
-            /* Adjust Close and Back Icons */
             #close-widget {
-                top: 15px; 
-                right: 15px;
+                top: -25px; 
+                right: -10px;
                 bottom: auto;
                 transform: rotate(0deg); 
             }
 
+            #close-widget,
             #back-arrow {
-                top: 15px;
-                left: 15px;
+                background-color: transparent;
+            }
+
+            #back-arrow,
+            #close-widget,
+            #back-arrow img,
+            #close-widget img {
+                animation: none !important;
+                transition: none !important;
+                background-color: transparent !important;
+            }
+
+            #back-arrow:hover,
+            #close-widget:hover,
+            #back-arrow:hover img,
+            #close-widget:hover img {
+                animation: none !important;
+                transition: none !important;
+                background-color: transparent !important;
+                filter: none !important;
+            }
+
+            #close-widget img,
+            #back-arrow img {
+                filter: none;
+                transition: none;
+            }
+
+            #back-arrow {
+                top: -10px;
+                left: 5px;
                 bottom: auto;
             }
 
-            /* Adjust Tab Font Size */
+
             #tab {
                 font-size: 24px;
             }
 
-            /* Adjust Widget Option Styles */
+
             .widget-option,
             .sub-option,
             .location-item {
@@ -894,19 +943,18 @@
                 width: 40px;
             }
 
-            /* Hide Maximize Widget on Mobile */
+
             #maximize-widget {
                 display: none;
             }
 
-            /* Adjust Content Layout */
             #widget-content {
                 gap: 10px;
             }
         }
     </style>
 
-<script src="index.js"></script>
+<script src="https://suhedges.github.io/sidebarw/index.js"></script>
 </head>
 <body>
     <div id="tsb-widget" onclick="expandWidget(event)">
