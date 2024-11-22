@@ -127,17 +127,23 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transform: translateY(-100%);
+            transform: translateY(0);
             opacity: 0;
             animation: slideDown 0.3s forwards;
             position: absolute;
-            width: 30%;
+            max-width: 70%;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+       .suggestion-box span {
+            padding-left: 10px;
+            padding-right: 10px;
+
         }
 
         @keyframes slideDown {
             to {
-                transform: translateY(0);
+                transform: translateY(-45%);
                 opacity: 1;
             }
         }
@@ -148,19 +154,20 @@
 
         @keyframes slideUp {
             to {
-                transform: translateY(-100%);
+                transform: translateY(100%);
                 opacity: 0;
             }
         }
 
-        /* Close Button Inside Suggestion Box */
         .suggestion-close {
             background: none;
+            position: absolute;
             border: none;
-            font-size: 1em;
+            font-size: 1.5em;
             cursor: pointer;
             color: var(--text-color);
-            margin-left: 0;
+            right: 10px;
+            top: 2px;
             padding: 0;
             line-height: 1;
         }
